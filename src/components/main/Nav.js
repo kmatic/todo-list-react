@@ -7,14 +7,16 @@ const Nav = ({ projects, onClick, delProject }) => {
     return (
         <NavWrapper>
             <ProjectsWrapper>
-                <DefaultItemWrapper>
-                    <FontAwesomeIcon icon={faInbox} />
-                    Inbox
-                </DefaultItemWrapper>
+                {projects.slice(0, 1).map(project => (
+                    <DefaultItemWrapper>
+                        <FontAwesomeIcon icon={faInbox} />
+                        {project.projectName}
+                    </DefaultItemWrapper>
+                ))}
             </ProjectsWrapper>
             <h1>Projects</h1>
             <ProjectsWrapper>
-                {projects.map(project => (
+                {projects.slice(1).map(project => (
                     <ProjectItem
                         key={project.id}
                         project={project}

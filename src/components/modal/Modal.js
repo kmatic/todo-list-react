@@ -32,7 +32,7 @@ export const ProjectModal = ({show, onClose, handleProject, project, onSubmit}) 
     );
 }
 
-export const TodoModal = ({ show, onClose }) => {
+export const TodoModal = ({ show, onClose, todo, handleTodo }) => {
     if (!show) {
         return null;
     }
@@ -47,19 +47,37 @@ export const TodoModal = ({ show, onClose }) => {
                 <form>
                     <div>
                         <label htmlFor='title'>Title: *</label>
-                        <input type='text' name='title' required />
+                        <input
+                            type='text'
+                            name='title'
+                            value={todo.title}
+                            onChange={(e) => handleTodo(e)}
+                            required
+                        />
                     </div>
                     <div>
                         <label htmlFor='description'>Description:</label>
-                        <textarea name='description' cols='30' rows='10'></textarea>
+                        <textarea
+                            name='description'
+                            cols='30'
+                            rows='10'
+                            value={todo.description}
+                            onChange={(e) => handleTodo(e)}
+                        ></textarea>
                     </div>
                     <div>
                         <label htmlFor='dueDate'>Due Date: *</label>
-                        <input type='date' name='dueDate' required />
+                        <input
+                            type='date'
+                            name='dueDate'
+                            value={todo.dueDate}
+                            onChange={(e) => handleTodo(e)}
+                            required
+                        />
                     </div>
                     <div>
                         <label htmlFor='priority'>Priority:</label>
-                        <select name='priority'>
+                        <select name='priority' value={todo.priority} onChange={(e) => handleTodo(e)}>
                             <option value='1'>High</option>
                             <option value='2'>Medium</option>
                             <option value='3'>Low</option>

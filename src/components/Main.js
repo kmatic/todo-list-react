@@ -20,14 +20,13 @@ const Main = () => {
             dueDate: '',
             priority: ''
         },
-        projects: [
-            {id: uuidv4(), projectName: 'gym', todos: []}
-        ]
+        projects: [{id: uuidv4(), projectName: 'Inbox', todos: []}]
     };
 
     const [data, setData] = useState(fields);
     const [showProjectModal, setShowProjectModal] = useState(false);
     const [showTodoModal, setShowTodoModal] = useState(false);
+    const [activeProject, setActiveProject] = useState('Inbox');
 
     const handleProject = (e) => {
         setData((prevState) => ({
@@ -36,6 +35,16 @@ const Main = () => {
                 ...prevState.project,
                 [e.target.name]: e.target.value,
             },
+        }));
+    }
+
+    const handleTodo = (e) => {
+        setData((prevState) => ({
+            ...prevState,
+            todo: {
+                ...prevState.todo,
+                [e.target.name]: e.target.value,
+            }
         }));
     }
 
@@ -85,6 +94,8 @@ const Main = () => {
             <TodoModal
                 show={showTodoModal}
                 onClose={() => setShowTodoModal(false)}
+                todo={data.todo}
+                handleTodo={handleTodo}
             />
         </>
     );
