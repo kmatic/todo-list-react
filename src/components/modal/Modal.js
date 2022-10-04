@@ -44,7 +44,7 @@ export const TodoModal = ({ show, onClose, todo, handleTodo, activeProject, onSu
                     <h2>New Todo</h2>
                     <span onClick={() => onClose()}>&times;</span>
                 </Header>
-                <form onSubmit={(e) => onSubmit(e, activeProject.id)}>
+                <form onSubmit={(e) => onSubmit(e, activeProject.id, todo.id)}>
                     <div>
                         <label htmlFor='title'>Title: *</label>
                         <input

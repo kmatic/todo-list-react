@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Todo from "./Todo";
 
-const Todos = ({ onClick, activeProject }) => {
+const Todos = ({ onClick, activeProject, delTodo, editTodo }) => {
     return (
         <TodosWrapper>
             <h1>{activeProject.projectName}</h1>
@@ -13,6 +13,9 @@ const Todos = ({ onClick, activeProject }) => {
                     <Todo
                         key={todo.id}
                         todo={todo}
+                        delTodo={delTodo}
+                        activeProject={activeProject}
+                        editTodo={editTodo}
                     />
                 ))}
             </div>
@@ -25,7 +28,7 @@ const TodosWrapper = styled.div`
     padding: 30px 40px;
     display: flex;
     flex-direction: column;
-
+    max-width: 80%;
     > h1 {
         padding-bottom: 10px;
     }

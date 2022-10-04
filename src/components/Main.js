@@ -78,14 +78,38 @@ const Main = () => {
         setActiveProject(newActiveProject);
     }
 
-    const addTodo = (e, id) => {
+    const addTodo = (e, projectId, todoId) => {
         e.preventDefault();
-        const updatedProjects = data.projects.map(project => {
-            if (project.id === id) {
-                return {...project, todos: [...project.todos, data.todo]};
-            }
-            return project;
-        });
+        let updatedProjects;
+
+        if (activeProject.todos.find(todo => todo.id === todoId)) {
+            let updatedTodos = activeProject.todos.map(todo => {
+                if (todo.id === todoId) {
+                    return {
+                        id: data.todo.id,
+                        title: data.todo.title,
+                        description: data.todo.description,
+                        dueDate: data.todo.dueDate,
+                        priority: data.todo.priority
+                    }
+                }
+                return todo;
+            });
+
+            updatedProjects = data.projects.map(project => {
+                if (project.id === projectId) {
+                    return {...project, todos: updatedTodos};
+                }
+                return project;
+            });
+        } else {
+            updatedProjects = data.projects.map(project => {
+                if (project.id === projectId) {
+                    return {...project, todos: [...project.todos, data.todo]};
+                }
+                return project;
+            });
+        }
 
         setData((prevState) => ({
             ...prevState,
@@ -100,6 +124,38 @@ const Main = () => {
         }))
 
         setShowTodoModal(false);
+    }
+
+    const delTodo = (todoId, projectId) => {
+        const updatedTodos = activeProject.todos.filter(todo => todo.id !== todoId);
+        const updatedProjects = data.projects.map(project => {
+            if (project.id === projectId) {
+                return {...project, todos: updatedTodos};
+            }
+            return project;
+        });
+
+        setData(prevState => ({
+            ...prevState,
+            projects: updatedProjects
+        })) 
+    }
+
+    const editTodo = (todoId) => {
+        const editedTodo = activeProject.todos.find(todo => todo.id === todoId);
+
+        setData(prevState => ({
+            ...prevState,
+            todo: {
+                id: editedTodo.id,
+                title: editedTodo.title,
+                description: editedTodo.description,
+                dueDate: editedTodo.dueDate,
+                priority: editedTodo.priority
+            }
+        }));
+
+        setShowTodoModal(true);
     }
 
     useEffect(() => {
@@ -118,6 +174,8 @@ const Main = () => {
                 <Todos
                     onClick={() => setShowTodoModal(true)}
                     activeProject={activeProject}
+                    delTodo={delTodo}
+                    editTodo={editTodo}
                 />
             </MainWrapper>
             <ProjectModal

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
-const Todo = ({ todo }) => {
+const Todo = ({ todo, delTodo, activeProject, editTodo }) => {
     return (
         <TodoWrapper>
             <div>
@@ -12,8 +12,8 @@ const Todo = ({ todo }) => {
             </div>
             <div>
                 <p>{todo.dueDate}</p>
-                <FontAwesomeIcon icon={faPen} />
-                <FontAwesomeIcon icon={faTrashCan} />
+                <FontAwesomeIcon icon={faPen} onClick={() => editTodo(todo.id)}/>
+                <FontAwesomeIcon icon={faTrashCan} onClick={() => delTodo(todo.id, activeProject.id)} />
             </div>
         </TodoWrapper>
     );
