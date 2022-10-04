@@ -32,7 +32,7 @@ export const ProjectModal = ({show, onClose, handleProject, project, onSubmit}) 
     );
 }
 
-export const TodoModal = ({ show, onClose, todo, handleTodo }) => {
+export const TodoModal = ({ show, onClose, todo, handleTodo, activeProject, onSubmit }) => {
     if (!show) {
         return null;
     }
@@ -44,7 +44,7 @@ export const TodoModal = ({ show, onClose, todo, handleTodo }) => {
                     <h2>New Todo</h2>
                     <span onClick={() => onClose()}>&times;</span>
                 </Header>
-                <form>
+                <form onSubmit={(e) => onSubmit(e, activeProject.id)}>
                     <div>
                         <label htmlFor='title'>Title: *</label>
                         <input
@@ -108,6 +108,7 @@ const ModalWrapper = styled.div`
         padding: 8px;
         border: 1px solid lightgray;
         border-radius: 4px;
+        resize: none;
     }
 
     input:invalid {

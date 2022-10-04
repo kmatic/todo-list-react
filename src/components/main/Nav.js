@@ -8,7 +8,7 @@ const Nav = ({ projects, onClick, delProject, changeActiveProject }) => {
         <NavWrapper>
             <ProjectsWrapper>
                 {projects.slice(0, 1).map(project => (
-                    <DefaultItemWrapper onClick={() => changeActiveProject(project.id)}>
+                    <DefaultItemWrapper key={project.id} onClick={() => changeActiveProject(project.id)}>
                         <FontAwesomeIcon icon={faInbox} />
                         {project.projectName}
                     </DefaultItemWrapper>

@@ -2,7 +2,7 @@ import React from "react";
 import Nav from "./main/Nav";
 import Todos from "./main/Todos";
 import styled from "styled-components";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ProjectModal, TodoModal } from "./modal/Modal";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -18,7 +18,7 @@ const Main = () => {
             title: '',
             description: '',
             dueDate: '',
-            priority: ''
+            priority: '1'
         },
         projects: [{id: uuidv4(), projectName: 'Inbox', todos: []}]
     };
@@ -78,6 +78,34 @@ const Main = () => {
         setActiveProject(newActiveProject);
     }
 
+    const addTodo = (e, id) => {
+        e.preventDefault();
+        const updatedProjects = data.projects.map(project => {
+            if (project.id === id) {
+                return {...project, todos: [...project.todos, data.todo]};
+            }
+            return project;
+        });
+
+        setData((prevState) => ({
+            ...prevState,
+            todo: {
+                id: uuidv4(),
+                title: '',
+                description: '',
+                dueDate: '',
+                priority: ''
+            },
+            projects: updatedProjects
+        }))
+
+        setShowTodoModal(false);
+    }
+
+    useEffect(() => {
+        changeActiveProject(activeProject.id);
+    })
+
     return (
         <>
             <MainWrapper>
@@ -104,6 +132,8 @@ const Main = () => {
                 onClose={() => setShowTodoModal(false)}
                 todo={data.todo}
                 handleTodo={handleTodo}
+                activeProject={activeProject}
+                onSubmit={addTodo}
             />
         </>
     );

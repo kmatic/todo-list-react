@@ -2,13 +2,19 @@ import React from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import Todo from "./Todo";
 
 const Todos = ({ onClick, activeProject }) => {
     return (
         <TodosWrapper>
             <h1>{activeProject.projectName}</h1>
             <div>
-
+                {activeProject.todos.map(todo => (
+                    <Todo
+                        key={todo.id}
+                        todo={todo}
+                    />
+                ))}
             </div>
             <Button onClick={() => onClick()}><FontAwesomeIcon icon={faPlus} /> Add Task</Button>
         </TodosWrapper>
@@ -19,6 +25,10 @@ const TodosWrapper = styled.div`
     padding: 30px 40px;
     display: flex;
     flex-direction: column;
+
+    > h1 {
+        padding-bottom: 10px;
+    }
 `;
 
 const Button = styled.button`
