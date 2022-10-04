@@ -26,7 +26,7 @@ const Main = () => {
     const [data, setData] = useState(fields);
     const [showProjectModal, setShowProjectModal] = useState(false);
     const [showTodoModal, setShowTodoModal] = useState(false);
-    const [activeProject, setActiveProject] = useState('Inbox');
+    const [activeProject, setActiveProject] = useState(data.projects[0]);
 
     const handleProject = (e) => {
         setData((prevState) => ({
@@ -72,6 +72,12 @@ const Main = () => {
         }))
     }
 
+    const changeActiveProject = (id) => {
+        const newActiveProject = data.projects.find(project => project.id === id);
+
+        setActiveProject(newActiveProject);
+    }
+
     return (
         <>
             <MainWrapper>
@@ -79,9 +85,11 @@ const Main = () => {
                     projects={data.projects}
                     onClick={() => setShowProjectModal(true)}
                     delProject={delProject}
+                    changeActiveProject={changeActiveProject}
                 />
                 <Todos
                     onClick={() => setShowTodoModal(true)}
+                    activeProject={activeProject}
                 />
             </MainWrapper>
             <ProjectModal

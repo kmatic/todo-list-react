@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-const Todos = ({ onClick }) => {
+const Todos = ({ onClick, activeProject }) => {
     return (
         <TodosWrapper>
-            <h1>Inbox</h1>
+            <h1>{activeProject.projectName}</h1>
             <div>
 
             </div>
