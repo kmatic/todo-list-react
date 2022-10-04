@@ -63,6 +63,7 @@ const ProjectItemWrapper = styled.div`
     padding: 10px;
     border-radius: 5px;
     align-items: center;
+    font-size: 1.1rem;
 
     > div {
         display: flex;

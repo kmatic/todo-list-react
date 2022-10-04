@@ -1,8 +1,9 @@
 import React from "react";
 import Nav from "./main/Nav";
+import Todos from "./main/Todos";
 import styled from "styled-components";
 import { useState } from 'react';
-import ProjectModal from "./modal/Modal";
+import { ProjectModal, TodoModal } from "./modal/Modal";
 import { v4 as uuidv4 } from 'uuid';
 
 const Main = () => {
@@ -12,6 +13,13 @@ const Main = () => {
             projectName: '',
             todos: []
         },
+        todo: {
+            id: uuidv4(),
+            title: '',
+            description: '',
+            dueDate: '',
+            priority: ''
+        },
         projects: [
             {id: uuidv4(), projectName: 'gym', todos: []}
         ]
@@ -19,6 +27,7 @@ const Main = () => {
 
     const [data, setData] = useState(fields);
     const [showProjectModal, setShowProjectModal] = useState(false);
+    const [showTodoModal, setShowTodoModal] = useState(false);
 
     const handleProject = (e) => {
         setData((prevState) => ({
@@ -33,6 +42,7 @@ const Main = () => {
     const addProject = (e) => {
         e.preventDefault();
         setData((prevState) => ({
+            ...prevState,
             project: {
                 id: uuidv4(),
                 projectName: '',
@@ -42,7 +52,6 @@ const Main = () => {
         }));
 
         setShowProjectModal(false);
-        console.log(data);
     }
 
     const delProject = (id) => {
@@ -62,6 +71,9 @@ const Main = () => {
                     onClick={() => setShowProjectModal(true)}
                     delProject={delProject}
                 />
+                <Todos
+                    onClick={() => setShowTodoModal(true)}
+                />
             </MainWrapper>
             <ProjectModal
                 show={showProjectModal}
@@ -69,6 +81,10 @@ const Main = () => {
                 project={data.project}
                 handleProject={handleProject}
                 onSubmit={addProject}
+            />
+            <TodoModal
+                show={showTodoModal}
+                onClose={() => setShowTodoModal(false)}
             />
         </>
     );

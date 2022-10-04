@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const ProjectModal = ({show, onClose, handleProject, project, onSubmit}) => {
+export const ProjectModal = ({show, onClose, handleProject, project, onSubmit}) => {
     if (!show) {
         return null;
     }
@@ -25,6 +25,48 @@ const ProjectModal = ({show, onClose, handleProject, project, onSubmit}) => {
                     </div>
                     <div>
                         <ModalButton>Add Project</ModalButton>
+                    </div>
+                </form>
+            </ModalContainer>
+        </ModalWrapper>
+    );
+}
+
+export const TodoModal = ({ show, onClose }) => {
+    if (!show) {
+        return null;
+    }
+
+    return (
+        <ModalWrapper onClick={() => onClose()}>
+            <ModalContainer onClick={e => e.stopPropagation()}>
+                <Header>
+                    <h2>New Todo</h2>
+                    <span onClick={() => onClose()}>&times;</span>
+                </Header>
+                <form>
+                    <div>
+                        <label htmlFor='title'>Title: *</label>
+                        <input type='text' name='title' required />
+                    </div>
+                    <div>
+                        <label htmlFor='description'>Description:</label>
+                        <textarea name='description' cols='30' rows='10'></textarea>
+                    </div>
+                    <div>
+                        <label htmlFor='dueDate'>Due Date: *</label>
+                        <input type='date' name='dueDate' required />
+                    </div>
+                    <div>
+                        <label htmlFor='priority'>Priority:</label>
+                        <select name='priority'>
+                            <option value='1'>High</option>
+                            <option value='2'>Medium</option>
+                            <option value='3'>Low</option>
+                        </select>
+                    </div>
+                    <div>
+                        <ModalButton>Submit Todo</ModalButton>
                     </div>
                 </form>
             </ModalContainer>
@@ -103,5 +145,3 @@ const ModalButton = styled.button`
     border-radius: 4px;
     font-size: 1.2rem;
 `;
-
-export default ProjectModal;
