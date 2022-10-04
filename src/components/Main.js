@@ -13,7 +13,7 @@ const Main = () => {
             todos: []
         },
         projects: [
-            {id: uuidv4, projectName: 'gym', todos: []}
+            {id: uuidv4(), projectName: 'gym', todos: []}
         ]
     };
 
@@ -45,12 +45,22 @@ const Main = () => {
         console.log(data);
     }
 
+    const delProject = (id) => {
+        const updatedProjects = data.projects.filter(project => project.id !== id);
+        
+        setData(prevState => ({
+            ...prevState,
+            projects: updatedProjects
+        }))
+    }
+
     return (
         <>
             <MainWrapper>
                 <Nav
                     projects={data.projects}
                     onClick={() => setShowProjectModal(true)}
+                    delProject={delProject}
                 />
             </MainWrapper>
             <ProjectModal

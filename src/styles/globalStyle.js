@@ -37,6 +37,12 @@ const GlobalStyle = createGlobalStyle`
         font-size: inherit;
         cursor: pointer;
     }
+
+    #root {
+        height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr;   
+    }
 `;
 
 export default GlobalStyle;

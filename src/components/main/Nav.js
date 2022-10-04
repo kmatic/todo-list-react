@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInbox, faPlus, faCalendarDays, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
-const Nav = ({ projects, onClick }) => {
+const Nav = ({ projects, onClick, delProject }) => {
     return (
         <NavWrapper>
             <ProjectsWrapper>
@@ -15,7 +15,11 @@ const Nav = ({ projects, onClick }) => {
             <h1>Projects</h1>
             <ProjectsWrapper>
                 {projects.map(project => (
-                    <ProjectItem key={project.id} project={project}/>
+                    <ProjectItem
+                        key={project.id}
+                        project={project}
+                        delProject={delProject}
+                    />
                 ))}
             </ProjectsWrapper>
             <Button onClick={() => onClick()}><FontAwesomeIcon icon={faPlus} /> Add Project</Button>
@@ -23,7 +27,7 @@ const Nav = ({ projects, onClick }) => {
     );
 }
 
-const ProjectItem = ({ project }) => {
+const ProjectItem = ({ project, delProject }) => {
     return (
         <ProjectItemWrapper>
             <div>
@@ -33,6 +37,7 @@ const ProjectItem = ({ project }) => {
             <FontAwesomeIcon
                 icon={faTrashCan}
                 className='project-delete-btn'
+                onClick={() => delProject(project.id)}
             />
         </ProjectItemWrapper>
     );
