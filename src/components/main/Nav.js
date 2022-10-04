@@ -15,7 +15,7 @@ const Nav = ({ projects, onClick }) => {
             <h1>Projects</h1>
             <ProjectsWrapper>
                 {projects.map(project => (
-                    <ProjectItem project={project}/>
+                    <ProjectItem key={project.id} project={project}/>
                 ))}
             </ProjectsWrapper>
             <Button onClick={() => onClick()}><FontAwesomeIcon icon={faPlus} /> Add Project</Button>
@@ -28,7 +28,7 @@ const ProjectItem = ({ project }) => {
         <ProjectItemWrapper>
             <div>
                 <FontAwesomeIcon icon={faCalendarDays} />
-                <p>{project.name}</p>
+                <p>{project.projectName}</p>
             </div>
             <FontAwesomeIcon
                 icon={faTrashCan}

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const ProjectModal = ({show, onClose}) => {
+const ProjectModal = ({show, onClose, handleProject, project, onSubmit}) => {
     if (!show) {
         return null;
     }
@@ -12,10 +12,16 @@ const ProjectModal = ({show, onClose}) => {
                     <h2>New Project</h2>
                     <span onClick={() => onClose()}>&times;</span>
                 </Header>
-                <form>
+                <form onSubmit={(e) => onSubmit(e)}>
                     <div>
-                        <label for='projectName'>Name: *</label>
-                        <input type='text' name='projectName' required />
+                        <label htmlFor='projectName'>Name: *</label>
+                        <input
+                            type='text'
+                            name='projectName'
+                            onChange={(e) => handleProject(e)}
+                            value={project.projectName}
+                            required
+                        />
                     </div>
                     <div>
                         <ModalButton>Add Project</ModalButton>
