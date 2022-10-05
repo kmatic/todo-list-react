@@ -2,8 +2,12 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInbox, faPlus, faCalendarDays, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { open } from '../../redux/projectModal';
 
-const Nav = ({ projects, onClick, delProject, changeActiveProject }) => {
+const Nav = ({ projects, delProject, changeActiveProject }) => {
+    const dispatch = useDispatch();
+
     return (
         <NavWrapper>
             <ProjectsWrapper>
@@ -25,7 +29,7 @@ const Nav = ({ projects, onClick, delProject, changeActiveProject }) => {
                     />
                 ))}
             </ProjectsWrapper>
-            <Button onClick={() => onClick()}><FontAwesomeIcon icon={faPlus} /> Add Project</Button>
+            <Button onClick={() => dispatch(open())}><FontAwesomeIcon icon={faPlus} /> Add Project</Button>
         </NavWrapper>
     );
 }

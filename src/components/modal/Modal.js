@@ -1,16 +1,22 @@
+import React from "react";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import { close } from '../../redux/projectModal'
 
-export const ProjectModal = ({show, onClose, handleProject, project, onSubmit}) => {
+export const ProjectModal = ({ handleProject, project, onSubmit }) => {
+    const { show } = useSelector((state) => state.projectModal);
+    const dispatch = useDispatch();
+
     if (!show) {
         return null;
     }
 
     return (
-        <ModalWrapper onClick={() => onClose()}>
+        <ModalWrapper onClick={() => dispatch(close())}>
             <ModalContainer onClick={e => e.stopPropagation()}>
                 <Header>
                     <h2>New Project</h2>
-                    <span onClick={() => onClose()}>&times;</span>
+                    <span onClick={() => dispatch(close())}>&times;</span>
                 </Header>
                 <form onSubmit={(e) => onSubmit(e)}>
                     <div>
