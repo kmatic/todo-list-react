@@ -26,16 +26,6 @@ const Main = () => {
     const [data, setData] = useState(fields);
     const [activeProject, setActiveProject] = useState(data.projects[0]);
 
-    const handleProject = (e) => {
-        setData((prevState) => ({
-            ...prevState,
-            project: {
-                ...prevState.project,
-                [e.target.name]: e.target.value,
-            },
-        }));
-    }
-
     const handleTodo = (e) => {
         setData((prevState) => ({
             ...prevState,
@@ -44,21 +34,6 @@ const Main = () => {
                 [e.target.name]: e.target.value,
             }
         }));
-    }
-
-    const addProject = (e) => {
-        e.preventDefault();
-        setData((prevState) => ({
-            ...prevState,
-            project: {
-                id: uuidv4(),
-                projectName: '',
-                todos: []
-            },
-            projects: [...prevState.projects, prevState.project]
-        }));
-
-        // setShowProjectModal(false);
     }
 
     const delProject = (id) => {
@@ -183,7 +158,6 @@ const Main = () => {
         <>
             <MainWrapper>
                 <Nav
-                    projects={data.projects}
                     delProject={delProject}
                     changeActiveProject={changeActiveProject}
                 />
@@ -195,8 +169,6 @@ const Main = () => {
             </MainWrapper>
             <ProjectModal
                 project={data.project}
-                handleProject={handleProject}
-                onSubmit={addProject}
             />
             <TodoModal
                 onClose={closeEditModal}

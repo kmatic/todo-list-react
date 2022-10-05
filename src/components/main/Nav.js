@@ -2,10 +2,11 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInbox, faPlus, faCalendarDays, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { openProject } from '../../redux/projectModal';
 
-const Nav = ({ projects, delProject, changeActiveProject }) => {
+const Nav = ({ delProject, changeActiveProject }) => {
+    const { projects } = useSelector((state) => state.data);
     const dispatch = useDispatch();
 
     return (

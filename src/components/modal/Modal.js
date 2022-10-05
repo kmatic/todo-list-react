@@ -3,10 +3,18 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { closeProject } from '../../redux/projectModal';
 import { closeTodo } from '../../redux/todoModal';
+import { handleProject, addProject } from '../../redux/data';
 
-export const ProjectModal = ({ handleProject, project, onSubmit }) => {
+export const ProjectModal = ({ project, onSubmit }) => {
     const { show } = useSelector((state) => state.projectModal);
+    const { projectName } = useSelector((state) => state.data.project)
     const dispatch = useDispatch();
+
+    const dispatchAddProject = (e) => {
+        e.preventDefault();
+        dispatch(addProject());
+        dispatch(closeProject());
+    }
 
     if (!show) {
         return null;
@@ -19,14 +27,14 @@ export const ProjectModal = ({ handleProject, project, onSubmit }) => {
                     <h2>New Project</h2>
                     <span onClick={() => dispatch(closeProject())}>&times;</span>
                 </Header>
-                <form onSubmit={(e) => onSubmit(e)}>
+                <form onSubmit={(e) => dispatchAddProject(e)}>
                     <div>
                         <label htmlFor='projectName'>Name: *</label>
                         <input
                             type='text'
                             name='projectName'
-                            onChange={(e) => handleProject(e)}
-                            value={project.projectName}
+                            onChange={(e) => dispatch(handleProject(e.target.value))}
+                            value={projectName}
                             required
                         />
                     </div>
