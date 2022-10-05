@@ -52,6 +52,7 @@ const NavWrapper = styled.nav`
     display: flex;
     flex-direction: column;
     gap: 25px;
+    border-right: 1px solid lightgray;
 `;
 
 const ProjectsWrapper = styled.div`

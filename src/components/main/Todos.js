@@ -25,10 +25,12 @@ const Todos = ({ onClick, activeProject, delTodo, editTodo }) => {
 }
 
 const TodosWrapper = styled.div`
-    padding: 30px 40px;
+    padding-top: 30px;
     display: flex;
     flex-direction: column;
-    max-width: 80%;
+    width: 75%;
+    justify-self: center;
+
     > h1 {
         padding-bottom: 10px;
     }

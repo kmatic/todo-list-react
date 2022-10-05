@@ -78,9 +78,9 @@ export const TodoModal = ({ show, onClose, todo, handleTodo, activeProject, onSu
                     <div>
                         <label htmlFor='priority'>Priority:</label>
                         <select name='priority' value={todo.priority} onChange={(e) => handleTodo(e)}>
-                            <option value='1'>High</option>
-                            <option value='2'>Medium</option>
-                            <option value='3'>Low</option>
+                            <option value='High'>High</option>
+                            <option value='Medium'>Medium</option>
+                            <option value='Low'>Low</option>
                         </select>
                     </div>
                     <div>

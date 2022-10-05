@@ -18,7 +18,7 @@ const Main = () => {
             title: '',
             description: '',
             dueDate: '',
-            priority: '1'
+            priority: 'High'
         },
         projects: [{id: uuidv4(), projectName: 'Inbox', todos: []}]
     };
@@ -118,7 +118,7 @@ const Main = () => {
                 title: '',
                 description: '',
                 dueDate: '',
-                priority: ''
+                priority: 'High'
             },
             projects: updatedProjects
         }))
@@ -126,7 +126,9 @@ const Main = () => {
         setShowTodoModal(false);
     }
 
-    const delTodo = (todoId, projectId) => {
+    const delTodo = (e, todoId, projectId) => {
+        e.stopPropagation();
+
         const updatedTodos = activeProject.todos.filter(todo => todo.id !== todoId);
         const updatedProjects = data.projects.map(project => {
             if (project.id === projectId) {
@@ -141,7 +143,9 @@ const Main = () => {
         })) 
     }
 
-    const editTodo = (todoId) => {
+    const editTodo = (e, todoId) => {
+        e.stopPropagation();
+
         const editedTodo = activeProject.todos.find(todo => todo.id === todoId);
 
         setData(prevState => ({
@@ -156,6 +160,21 @@ const Main = () => {
         }));
 
         setShowTodoModal(true);
+    }
+
+    const closeEditModal = () => {
+        setData(prevState => ({
+            ...prevState,
+            todo: {
+                id: uuidv4(),
+                title: '',
+                description: '',
+                dueDate: '',
+                priority: 'High'
+            }
+        }));
+        
+        setShowTodoModal(false);
     }
 
     useEffect(() => {
@@ -187,7 +206,7 @@ const Main = () => {
             />
             <TodoModal
                 show={showTodoModal}
-                onClose={() => setShowTodoModal(false)}
+                onClose={closeEditModal}
                 todo={data.todo}
                 handleTodo={handleTodo}
                 activeProject={activeProject}
