@@ -4,8 +4,9 @@ import { faInbox, faPlus, faCalendarDays, faTrashCan } from "@fortawesome/free-s
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { openProject } from '../../redux/projectModal';
+import { delProject } from '../../redux/data';
 
-const Nav = ({ delProject, changeActiveProject }) => {
+const Nav = ({ changeActiveProject }) => {
     const { projects } = useSelector((state) => state.data);
     const dispatch = useDispatch();
 
@@ -25,7 +26,6 @@ const Nav = ({ delProject, changeActiveProject }) => {
                     <ProjectItem
                         key={project.id}
                         project={project}
-                        delProject={delProject}
                         changeActiveProject={changeActiveProject}
                     />
                 ))}
@@ -35,7 +35,14 @@ const Nav = ({ delProject, changeActiveProject }) => {
     );
 }
 
-const ProjectItem = ({ project, delProject, changeActiveProject }) => {
+const ProjectItem = ({ project, changeActiveProject }) => {
+    const dispatch = useDispatch();
+
+    const dispatchDelete = (e, id) => {
+        e.stopPropagation();
+        dispatch(delProject(id));
+    }
+
     return (
         <ProjectItemWrapper onClick={() => changeActiveProject(project.id)}>
             <div>
@@ -45,7 +52,7 @@ const ProjectItem = ({ project, delProject, changeActiveProject }) => {
             <FontAwesomeIcon
                 icon={faTrashCan}
                 className='project-delete-btn'
-                onClick={() => delProject(project.id)}
+                onClick={(e) => dispatchDelete(e, project.id)}
             />
         </ProjectItemWrapper>
     );

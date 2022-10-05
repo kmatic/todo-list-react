@@ -31,10 +31,15 @@ export const dataSlice = createSlice({
                 projectName: '',
                 todos: []
             }
-        }
+        },
+        delProject: (state, action) => {
+            console.log(action.payload);
+            const newProjects = state.projects.filter(project => project.id !== action.payload);
+            state.projects = newProjects;
+        },
     },
 });
 
-export const { handleProject, addProject } = dataSlice.actions;
+export const { handleProject, addProject, delProject } = dataSlice.actions;
 
 export default dataSlice.reducer;

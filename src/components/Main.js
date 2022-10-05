@@ -36,15 +36,6 @@ const Main = () => {
         }));
     }
 
-    const delProject = (id) => {
-        const updatedProjects = data.projects.filter(project => project.id !== id);
-        
-        setData(prevState => ({
-            ...prevState,
-            projects: updatedProjects
-        }))
-    }
-
     const changeActiveProject = (id) => {
         const newActiveProject = data.projects.find(project => project.id === id);
 
@@ -158,7 +149,6 @@ const Main = () => {
         <>
             <MainWrapper>
                 <Nav
-                    delProject={delProject}
                     changeActiveProject={changeActiveProject}
                 />
                 <Todos
