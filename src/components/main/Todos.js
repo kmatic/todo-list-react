@@ -3,8 +3,12 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Todo from "./Todo";
+import { useDispatch } from "react-redux";
+import { openTodo } from '../../redux/todoModal';
 
-const Todos = ({ onClick, activeProject, delTodo, editTodo }) => {
+const Todos = ({ activeProject, delTodo, editTodo }) => {
+    const dispatch = useDispatch();
+    
     return (
         <TodosWrapper>
             <h1>{activeProject.projectName}</h1>
@@ -19,7 +23,7 @@ const Todos = ({ onClick, activeProject, delTodo, editTodo }) => {
                     />
                 ))}
             </div>
-            <Button onClick={() => onClick()}><FontAwesomeIcon icon={faPlus} /> Add Task</Button>
+            <Button onClick={() => dispatch(openTodo())}><FontAwesomeIcon icon={faPlus} /> Add Task</Button>
         </TodosWrapper>
     );
 }

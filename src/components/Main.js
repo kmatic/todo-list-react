@@ -24,8 +24,6 @@ const Main = () => {
     };
 
     const [data, setData] = useState(fields);
-    const [showProjectModal, setShowProjectModal] = useState(false);
-    const [showTodoModal, setShowTodoModal] = useState(false);
     const [activeProject, setActiveProject] = useState(data.projects[0]);
 
     const handleProject = (e) => {
@@ -60,7 +58,7 @@ const Main = () => {
             projects: [...prevState.projects, prevState.project]
         }));
 
-        setShowProjectModal(false);
+        // setShowProjectModal(false);
     }
 
     const delProject = (id) => {
@@ -123,7 +121,7 @@ const Main = () => {
             projects: updatedProjects
         }))
 
-        setShowTodoModal(false);
+        // setShowTodoModal(false);
     }
 
     const delTodo = (e, todoId, projectId) => {
@@ -159,7 +157,7 @@ const Main = () => {
             }
         }));
 
-        setShowTodoModal(true);
+        // setShowTodoModal(true);
     }
 
     const closeEditModal = () => {
@@ -174,7 +172,7 @@ const Main = () => {
             }
         }));
         
-        setShowTodoModal(false);
+        // setShowTodoModal(false);
     }
 
     useEffect(() => {
@@ -186,26 +184,21 @@ const Main = () => {
             <MainWrapper>
                 <Nav
                     projects={data.projects}
-                    onClick={() => setShowProjectModal(true)}
                     delProject={delProject}
                     changeActiveProject={changeActiveProject}
                 />
                 <Todos
-                    onClick={() => setShowTodoModal(true)}
                     activeProject={activeProject}
                     delTodo={delTodo}
                     editTodo={editTodo}
                 />
             </MainWrapper>
             <ProjectModal
-                show={showProjectModal}
-                onClose={() => setShowProjectModal(false)}
                 project={data.project}
                 handleProject={handleProject}
                 onSubmit={addProject}
             />
             <TodoModal
-                show={showTodoModal}
                 onClose={closeEditModal}
                 todo={data.todo}
                 handleTodo={handleTodo}

@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { close } from '../../redux/projectModal'
+import { closeProject } from '../../redux/projectModal';
+import { closeTodo } from '../../redux/todoModal';
 
 export const ProjectModal = ({ handleProject, project, onSubmit }) => {
     const { show } = useSelector((state) => state.projectModal);
@@ -12,11 +13,11 @@ export const ProjectModal = ({ handleProject, project, onSubmit }) => {
     }
 
     return (
-        <ModalWrapper onClick={() => dispatch(close())}>
+        <ModalWrapper onClick={() => dispatch(closeProject())}>
             <ModalContainer onClick={e => e.stopPropagation()}>
                 <Header>
                     <h2>New Project</h2>
-                    <span onClick={() => dispatch(close())}>&times;</span>
+                    <span onClick={() => dispatch(closeProject())}>&times;</span>
                 </Header>
                 <form onSubmit={(e) => onSubmit(e)}>
                     <div>
@@ -38,17 +39,20 @@ export const ProjectModal = ({ handleProject, project, onSubmit }) => {
     );
 }
 
-export const TodoModal = ({ show, onClose, todo, handleTodo, activeProject, onSubmit }) => {
+export const TodoModal = ({ onClose, todo, handleTodo, activeProject, onSubmit }) => {
+    const { show } = useSelector((state) => state.todoModal);
+    const dispatch = useDispatch();
+
     if (!show) {
         return null;
     }
 
     return (
-        <ModalWrapper onClick={() => onClose()}>
+        <ModalWrapper onClick={() => dispatch(closeTodo())}>
             <ModalContainer onClick={e => e.stopPropagation()}>
                 <Header>
                     <h2>New Todo</h2>
-                    <span onClick={() => onClose()}>&times;</span>
+                    <span onClick={() => dispatch(closeTodo())}>&times;</span>
                 </Header>
                 <form onSubmit={(e) => onSubmit(e, activeProject.id, todo.id)}>
                     <div>

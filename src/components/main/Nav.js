@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInbox, faPlus, faCalendarDays, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { open } from '../../redux/projectModal';
+import { openProject } from '../../redux/projectModal';
 
 const Nav = ({ projects, delProject, changeActiveProject }) => {
     const dispatch = useDispatch();
@@ -29,7 +29,7 @@ const Nav = ({ projects, delProject, changeActiveProject }) => {
                     />
                 ))}
             </ProjectsWrapper>
-            <Button onClick={() => dispatch(open())}><FontAwesomeIcon icon={faPlus} /> Add Project</Button>
+            <Button onClick={() => dispatch(openProject())}><FontAwesomeIcon icon={faPlus} /> Add Project</Button>
         </NavWrapper>
     );
 }

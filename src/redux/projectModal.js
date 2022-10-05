@@ -8,15 +8,15 @@ export const projectModalSlice = createSlice({
     name: 'projectModal',
     initialState,
     reducers: {
-        open: (state) => {
+        openProject: (state) => {
             state.show = true;
         },
-        close: (state) => {
+        closeProject: (state) => {
             state.show = false;
         },
     },
 });
 
-export const { open, close } = projectModalSlice.actions;
+export const { openProject, closeProject } = projectModalSlice.actions;
 
 export default projectModalSlice.reducer;
