@@ -6,9 +6,8 @@ import { useState } from 'react';
 import { delTodo } from '../../redux/data';
 import { useDispatch, useSelector } from 'react-redux';
 
-const Todo = ({ todo, editTodo }) => {
+const Todo = ({ todo, editTodo, activeProject }) => {
     const [showDetails, setShowDetails] = useState(false);
-    const { activeProject } = useSelector((state) => state.data);
     const dispatch = useDispatch();
 
     return (

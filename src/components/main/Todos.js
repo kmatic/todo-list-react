@@ -7,8 +7,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openTodo } from '../../redux/todoModal';
 
 const Todos = ({ editTodo }) => {
-    const { activeProject } = useSelector((state) => state.data);
+    const { projects } = useSelector((state) => state.data);
     const dispatch = useDispatch();
+
+    const activeProject = projects.find((project) => project.active === true);
+
+    if (!activeProject) {
+        return null;
+    }
 
     return (
         <TodosWrapper>
@@ -19,7 +25,6 @@ const Todos = ({ editTodo }) => {
                         key={todo.id}
                         todo={todo}
                         activeProject={activeProject}
-                        editTodo={editTodo}
                     />
                 ))}
             </div>

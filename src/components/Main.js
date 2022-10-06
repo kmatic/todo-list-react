@@ -120,7 +120,7 @@ const Main = () => {
         <>
             <MainWrapper>
                 <Nav />
-                <Todos activeProject={activeProject} editTodo={editTodo} />
+                <Todos editTodo={editTodo} />
             </MainWrapper>
             <ProjectModal />
             <TodoModal />

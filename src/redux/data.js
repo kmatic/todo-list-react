@@ -6,6 +6,7 @@ const initialState = {
         id: uuidv4(),
         projectName: '',
         todos: [],
+        active: false,
     },
     todo: {
         id: uuidv4(),
@@ -14,10 +15,8 @@ const initialState = {
         dueDate: '',
         priority: 'High',
     },
-    projects: [{ id: uuidv4(), projectName: 'Inbox', todos: [] }],
+    projects: [{ id: uuidv4(), projectName: 'Inbox', todos: [], active: true }],
 };
-
-initialState.activeProject = initialState.projects[0];
 
 export const dataSlice = createSlice({
     name: 'data',
@@ -64,24 +63,22 @@ export const dataSlice = createSlice({
             };
         },
         changeActiveProject: (state, action) => {
-            const newActive = state.projects.find(
-                (project) => project.id === action.payload,
-            );
-
-            state.activeProject = newActive;
+            for (const project of state.projects) {
+                if (project.id === action.payload) {
+                    project.active = true;
+                } else if (project.active === true) {
+                    project.active = false;
+                }
+            }
         },
         delTodo: (state, action) => {
             const { projectId, todoId } = action.payload;
 
-            const updatedTodos = state.activeProject.todos.filter(
-                (todo) => todo.id !== todoId,
-            );
-
-            state.activeProject.todos = updatedTodos;
-
             for (const project of state.projects) {
                 if (project.id === projectId) {
-                    project.todos = updatedTodos;
+                    project.todos = project.todos.filter(
+                        (todo) => todo.id !== todoId,
+                    );
                 }
             }
         },

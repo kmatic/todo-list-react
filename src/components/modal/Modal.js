@@ -58,8 +58,10 @@ export const ProjectModal = () => {
 
 export const TodoModal = () => {
     const { show } = useSelector((state) => state.todoModal);
-    const { todo, activeProject } = useSelector((state) => state.data);
+    const { todo, projects } = useSelector((state) => state.data);
     const dispatch = useDispatch();
+
+    const activeProject = projects.find((project) => project.active === true);
 
     const onChange = (e) => {
         const payload = {
