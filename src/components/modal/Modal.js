@@ -1,20 +1,25 @@
-import React from "react";
-import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import React from 'react';
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
 import { closeProject } from '../../redux/projectModal';
 import { closeTodo } from '../../redux/todoModal';
-import { handleProject, addProject } from '../../redux/data';
+import {
+    handleProject,
+    addProject,
+    handleTodo,
+    addTodo,
+} from '../../redux/data';
 
-export const ProjectModal = ({ project, onSubmit }) => {
+export const ProjectModal = () => {
     const { show } = useSelector((state) => state.projectModal);
-    const { projectName } = useSelector((state) => state.data.project)
+    const { projectName } = useSelector((state) => state.data.project);
     const dispatch = useDispatch();
 
-    const dispatchAddProject = (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
         dispatch(addProject());
         dispatch(closeProject());
-    }
+    };
 
     if (!show) {
         return null;
@@ -22,18 +27,22 @@ export const ProjectModal = ({ project, onSubmit }) => {
 
     return (
         <ModalWrapper onClick={() => dispatch(closeProject())}>
-            <ModalContainer onClick={e => e.stopPropagation()}>
+            <ModalContainer onClick={(e) => e.stopPropagation()}>
                 <Header>
                     <h2>New Project</h2>
-                    <span onClick={() => dispatch(closeProject())}>&times;</span>
+                    <span onClick={() => dispatch(closeProject())}>
+                        &times;
+                    </span>
                 </Header>
-                <form onSubmit={(e) => dispatchAddProject(e)}>
+                <form onSubmit={(e) => onSubmit(e)}>
                     <div>
-                        <label htmlFor='projectName'>Name: *</label>
+                        <label htmlFor="projectName">Name: *</label>
                         <input
-                            type='text'
-                            name='projectName'
-                            onChange={(e) => dispatch(handleProject(e.target.value))}
+                            type="text"
+                            name="projectName"
+                            onChange={(e) =>
+                                dispatch(handleProject(e.target.value))
+                            }
                             value={projectName}
                             required
                         />
@@ -45,11 +54,32 @@ export const ProjectModal = ({ project, onSubmit }) => {
             </ModalContainer>
         </ModalWrapper>
     );
-}
+};
 
-export const TodoModal = ({ onClose, todo, handleTodo, activeProject, onSubmit }) => {
+export const TodoModal = () => {
     const { show } = useSelector((state) => state.todoModal);
+    const { todo, activeProject } = useSelector((state) => state.data);
     const dispatch = useDispatch();
+
+    const onChange = (e) => {
+        const payload = {
+            name: e.target.name,
+            value: e.target.value,
+        };
+
+        dispatch(handleTodo(payload));
+    };
+
+    const onSubmit = (e, projectId, todoId) => {
+        e.preventDefault();
+        const payload = {
+            projectId,
+            todoId,
+        };
+
+        dispatch(addTodo(payload));
+        dispatch(closeTodo());
+    };
 
     if (!show) {
         return null;
@@ -57,48 +87,50 @@ export const TodoModal = ({ onClose, todo, handleTodo, activeProject, onSubmit }
 
     return (
         <ModalWrapper onClick={() => dispatch(closeTodo())}>
-            <ModalContainer onClick={e => e.stopPropagation()}>
+            <ModalContainer onClick={(e) => e.stopPropagation()}>
                 <Header>
                     <h2>New Todo</h2>
                     <span onClick={() => dispatch(closeTodo())}>&times;</span>
                 </Header>
                 <form onSubmit={(e) => onSubmit(e, activeProject.id, todo.id)}>
                     <div>
-                        <label htmlFor='title'>Title: *</label>
+                        <label htmlFor="title">Title: *</label>
                         <input
-                            type='text'
-                            name='title'
+                            type="text"
+                            name="title"
                             value={todo.title}
-                            onChange={(e) => handleTodo(e)}
+                            onChange={(e) => onChange(e)}
                             required
                         />
                     </div>
                     <div>
-                        <label htmlFor='description'>Description:</label>
+                        <label htmlFor="description">Description:</label>
                         <textarea
-                            name='description'
-                            cols='30'
-                            rows='10'
+                            name="description"
+                            cols="30"
+                            rows="10"
                             value={todo.description}
-                            onChange={(e) => handleTodo(e)}
-                        ></textarea>
+                            onChange={(e) => onChange(e)}></textarea>
                     </div>
                     <div>
-                        <label htmlFor='dueDate'>Due Date: *</label>
+                        <label htmlFor="dueDate">Due Date: *</label>
                         <input
-                            type='date'
-                            name='dueDate'
+                            type="date"
+                            name="dueDate"
                             value={todo.dueDate}
-                            onChange={(e) => handleTodo(e)}
+                            onChange={(e) => onChange(e)}
                             required
                         />
                     </div>
                     <div>
-                        <label htmlFor='priority'>Priority:</label>
-                        <select name='priority' value={todo.priority} onChange={(e) => handleTodo(e)}>
-                            <option value='High'>High</option>
-                            <option value='Medium'>Medium</option>
-                            <option value='Low'>Low</option>
+                        <label htmlFor="priority">Priority:</label>
+                        <select
+                            name="priority"
+                            value={todo.priority}
+                            onChange={(e) => onChange(e)}>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
                         </select>
                     </div>
                     <div>
@@ -108,7 +140,7 @@ export const TodoModal = ({ onClose, todo, handleTodo, activeProject, onSubmit }
             </ModalContainer>
         </ModalWrapper>
     );
-}
+};
 
 const ModalWrapper = styled.div`
     position: fixed;

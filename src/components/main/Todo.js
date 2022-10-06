@@ -1,36 +1,61 @@
-import React from "react";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import React from 'react';
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import { delTodo } from '../../redux/data';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Todo = ({ todo, delTodo, activeProject, editTodo }) => {
+const Todo = ({ todo, editTodo }) => {
     const [showDetails, setShowDetails] = useState(false);
+    const { activeProject } = useSelector((state) => state.data);
+    const dispatch = useDispatch();
 
     return (
         <>
             <TodoWrapper onClick={() => setShowDetails(!showDetails)}>
                 <div>
-                    <input type='checkbox' onClick={(e) => e.stopPropagation()}/>
+                    <input
+                        type="checkbox"
+                        onClick={(e) => e.stopPropagation()}
+                    />
                     <p>{todo.title}</p>
                 </div>
                 <div>
                     <p>{todo.dueDate}</p>
-                    <Icon icon={faPen} onClick={(e) => editTodo(e, todo.id)}/>
-                    <Icon icon={faTrashCan} onClick={(e) => delTodo(e, todo.id, activeProject.id)} />
+                    <Icon icon={faPen} onClick={(e) => editTodo(e, todo.id)} />
+                    <Icon
+                        icon={faTrashCan}
+                        onClick={() =>
+                            dispatch(
+                                delTodo({
+                                    projectId: activeProject.id,
+                                    todoId: todo.id,
+                                }),
+                            )
+                        }
+                    />
                 </div>
             </TodoWrapper>
-            {showDetails && 
+            {showDetails && (
                 <DetailsWrapper>
-                    <p><span>Title:</span> {todo.title}</p>
-                    <p><span>Due date:</span> {todo.dueDate}</p>
-                    <p><span>Priority:</span> {todo.priority}</p>
-                    <p><span>Description:</span> {todo.description}</p>
+                    <p>
+                        <span>Title:</span> {todo.title}
+                    </p>
+                    <p>
+                        <span>Due date:</span> {todo.dueDate}
+                    </p>
+                    <p>
+                        <span>Priority:</span> {todo.priority}
+                    </p>
+                    <p>
+                        <span>Description:</span> {todo.description}
+                    </p>
                 </DetailsWrapper>
-            }
+            )}
         </>
     );
-}
+};
 
 const TodoWrapper = styled.div`
     display: flex;
@@ -69,7 +94,7 @@ const DetailsWrapper = styled.div`
     grid-template-columns: 1fr 1fr;
     gap: 5px;
 
-    >p>span {
+    > p > span {
         font-weight: 700;
     }
 `;

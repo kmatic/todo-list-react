@@ -1,32 +1,34 @@
-import React from "react";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import Todo from "./Todo";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import Todo from './Todo';
+import { useDispatch, useSelector } from 'react-redux';
 import { openTodo } from '../../redux/todoModal';
 
-const Todos = ({ activeProject, delTodo, editTodo }) => {
+const Todos = ({ editTodo }) => {
+    const { activeProject } = useSelector((state) => state.data);
     const dispatch = useDispatch();
-    
+
     return (
         <TodosWrapper>
             <h1>{activeProject.projectName}</h1>
             <div>
-                {activeProject.todos.map(todo => (
+                {activeProject.todos.map((todo) => (
                     <Todo
                         key={todo.id}
                         todo={todo}
-                        delTodo={delTodo}
                         activeProject={activeProject}
                         editTodo={editTodo}
                     />
                 ))}
             </div>
-            <Button onClick={() => dispatch(openTodo())}><FontAwesomeIcon icon={faPlus} /> Add Task</Button>
+            <Button onClick={() => dispatch(openTodo())}>
+                <FontAwesomeIcon icon={faPlus} /> Add Task
+            </Button>
         </TodosWrapper>
     );
-}
+};
 
 const TodosWrapper = styled.div`
     padding-top: 30px;

@@ -1,20 +1,29 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInbox, faPlus, faCalendarDays, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
 import { openProject } from '../../redux/projectModal';
-import { delProject } from '../../redux/data';
+import { delProject, changeActiveProject } from '../../redux/data';
+import {
+    faInbox,
+    faPlus,
+    faCalendarDays,
+    faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
 
-const Nav = ({ changeActiveProject }) => {
+const Nav = () => {
     const { projects } = useSelector((state) => state.data);
     const dispatch = useDispatch();
 
     return (
         <NavWrapper>
             <ProjectsWrapper>
-                {projects.slice(0, 1).map(project => (
-                    <DefaultItemWrapper key={project.id} onClick={() => changeActiveProject(project.id)}>
+                {projects.slice(0, 1).map((project) => (
+                    <DefaultItemWrapper
+                        key={project.id}
+                        onClick={() =>
+                            dispatch(changeActiveProject(project.id))
+                        }>
                         <FontAwesomeIcon icon={faInbox} />
                         {project.projectName}
                     </DefaultItemWrapper>
@@ -22,41 +31,40 @@ const Nav = ({ changeActiveProject }) => {
             </ProjectsWrapper>
             <h1>Projects</h1>
             <ProjectsWrapper>
-                {projects.slice(1).map(project => (
-                    <ProjectItem
-                        key={project.id}
-                        project={project}
-                        changeActiveProject={changeActiveProject}
-                    />
+                {projects.slice(1).map((project) => (
+                    <ProjectItem key={project.id} project={project} />
                 ))}
             </ProjectsWrapper>
-            <Button onClick={() => dispatch(openProject())}><FontAwesomeIcon icon={faPlus} /> Add Project</Button>
+            <Button onClick={() => dispatch(openProject())}>
+                <FontAwesomeIcon icon={faPlus} /> Add Project
+            </Button>
         </NavWrapper>
     );
-}
+};
 
-const ProjectItem = ({ project, changeActiveProject }) => {
+const ProjectItem = ({ project }) => {
     const dispatch = useDispatch();
 
     const dispatchDelete = (e, id) => {
         e.stopPropagation();
         dispatch(delProject(id));
-    }
+    };
 
     return (
-        <ProjectItemWrapper onClick={() => changeActiveProject(project.id)}>
+        <ProjectItemWrapper
+            onClick={() => dispatch(changeActiveProject(project.id))}>
             <div>
                 <FontAwesomeIcon icon={faCalendarDays} />
                 <p>{project.projectName}</p>
             </div>
             <FontAwesomeIcon
                 icon={faTrashCan}
-                className='project-delete-btn'
+                className="project-delete-btn"
                 onClick={(e) => dispatchDelete(e, project.id)}
             />
         </ProjectItemWrapper>
     );
-}
+};
 
 const NavWrapper = styled.nav`
     background-color: var(--light-color);
