@@ -3,12 +3,25 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-import { delTodo } from '../../redux/data';
-import { useDispatch, useSelector } from 'react-redux';
+import { delTodo, editTodo } from '../../redux/data';
+import { useDispatch } from 'react-redux';
+import { openTodo } from '../../redux/todoModal';
 
-const Todo = ({ todo, editTodo, activeProject }) => {
+const Todo = ({ todo, activeProject }) => {
     const [showDetails, setShowDetails] = useState(false);
     const dispatch = useDispatch();
+
+    const dispatchEdit = (e, projectId, todoId) => {
+        e.stopPropagation();
+
+        const payload = {
+            projectId,
+            todoId,
+        };
+
+        dispatch(editTodo(payload));
+        dispatch(openTodo());
+    };
 
     return (
         <>
@@ -22,7 +35,12 @@ const Todo = ({ todo, editTodo, activeProject }) => {
                 </div>
                 <div>
                     <p>{todo.dueDate}</p>
-                    <Icon icon={faPen} onClick={(e) => editTodo(e, todo.id)} />
+                    <Icon
+                        icon={faPen}
+                        onClick={(e) =>
+                            dispatchEdit(e, activeProject.id, todo.id)
+                        }
+                    />
                     <Icon
                         icon={faTrashCan}
                         onClick={() =>

@@ -6,7 +6,7 @@ import Todo from './Todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { openTodo } from '../../redux/todoModal';
 
-const Todos = ({ editTodo }) => {
+const Todos = () => {
     const { projects } = useSelector((state) => state.data);
     const dispatch = useDispatch();
 

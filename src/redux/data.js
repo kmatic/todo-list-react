@@ -47,13 +47,45 @@ export const dataSlice = createSlice({
             };
         },
         addTodo: (state, action) => {
+            let updatedProjects;
             const { projectId, todoId } = action.payload;
+            const activeProject = state.projects.find(
+                (project) => project.id === projectId,
+            );
 
-            for (const project of state.projects) {
-                if (project.id === projectId) {
-                    project.todos.push(state.todo);
-                }
+            if (activeProject.todos.find((todo) => todo.id === todoId)) {
+                let updatedTodos = activeProject.todos.map((todo) => {
+                    if (todo.id === todoId) {
+                        return {
+                            id: state.todo.id,
+                            title: state.todo.title,
+                            description: state.todo.description,
+                            dueDate: state.todo.dueDate,
+                            priority: state.todo.priority,
+                        };
+                    }
+                    return todo;
+                });
+
+                updatedProjects = state.projects.map((project) => {
+                    if (project.id === projectId) {
+                        return { ...project, todos: updatedTodos };
+                    }
+                    return project;
+                });
+            } else {
+                updatedProjects = state.projects.map((project) => {
+                    if (project.id === projectId) {
+                        return {
+                            ...project,
+                            todos: [...project.todos, state.todo],
+                        };
+                    }
+                    return project;
+                });
             }
+
+            state.projects = updatedProjects;
             state.todo = {
                 id: uuidv4(),
                 title: '',
@@ -82,6 +114,29 @@ export const dataSlice = createSlice({
                 }
             }
         },
+        editTodo: (state, action) => {
+            const { projectId, todoId } = action.payload;
+
+            const activeProject = state.projects.find(
+                (project) => project.id === projectId,
+            );
+
+            const editedTodo = activeProject.todos.find(
+                (todo) => todo.id === todoId,
+            );
+
+            state.todo = editedTodo;
+        },
+        clearTodoFields: (state) => {
+            console.log('yes');
+            state.todo = {
+                id: uuidv4(),
+                title: '',
+                description: '',
+                dueDate: '',
+                priority: 'High',
+            };
+        },
     },
 });
 
@@ -93,6 +148,8 @@ export const {
     addTodo,
     changeActiveProject,
     delTodo,
+    editTodo,
+    clearTodoFields,
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

@@ -8,17 +8,20 @@ import {
     addProject,
     handleTodo,
     addTodo,
+    clearTodoFields,
+    changeActiveProject,
 } from '../../redux/data';
 
 export const ProjectModal = () => {
     const { show } = useSelector((state) => state.projectModal);
-    const { projectName } = useSelector((state) => state.data.project);
+    const { project } = useSelector((state) => state.data);
     const dispatch = useDispatch();
 
-    const onSubmit = (e) => {
+    const onSubmit = (e, projectId) => {
         e.preventDefault();
         dispatch(addProject());
         dispatch(closeProject());
+        dispatch(changeActiveProject(projectId));
     };
 
     if (!show) {
@@ -34,7 +37,7 @@ export const ProjectModal = () => {
                         &times;
                     </span>
                 </Header>
-                <form onSubmit={(e) => onSubmit(e)}>
+                <form onSubmit={(e) => onSubmit(e, project.id)}>
                     <div>
                         <label htmlFor="projectName">Name: *</label>
                         <input
@@ -43,7 +46,7 @@ export const ProjectModal = () => {
                             onChange={(e) =>
                                 dispatch(handleProject(e.target.value))
                             }
-                            value={projectName}
+                            value={project.projectName}
                             required
                         />
                     </div>
@@ -83,16 +86,21 @@ export const TodoModal = () => {
         dispatch(closeTodo());
     };
 
+    const onClose = () => {
+        dispatch(closeTodo());
+        dispatch(clearTodoFields());
+    };
+
     if (!show) {
         return null;
     }
 
     return (
-        <ModalWrapper onClick={() => dispatch(closeTodo())}>
+        <ModalWrapper onClick={() => onClose()}>
             <ModalContainer onClick={(e) => e.stopPropagation()}>
                 <Header>
                     <h2>New Todo</h2>
-                    <span onClick={() => dispatch(closeTodo())}>&times;</span>
+                    <span onClick={() => onClose()}>&times;</span>
                 </Header>
                 <form onSubmit={(e) => onSubmit(e, activeProject.id, todo.id)}>
                     <div>
