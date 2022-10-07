@@ -6,6 +6,7 @@
   "editor.formatOnSaveMode": "file", // required to format on save
   "files.autoSave": "onFocusChange",
   "cSpell.words": [
+    "Firestore",
     "fontawesome",
     "fortawesome",
     "lightgray",
