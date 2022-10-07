@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
+import { ProjectModal } from '../modal/Modal';
 import { useSelector, useDispatch } from 'react-redux';
 import { openProject } from '../../redux/projectModal';
 import { delProject, changeActiveProject } from '../../redux/data';
@@ -13,32 +14,36 @@ import {
 
 const Nav = () => {
     const { projects } = useSelector((state) => state.data);
+    const { show } = useSelector((state) => state.projectModal);
     const dispatch = useDispatch();
 
     return (
-        <NavWrapper>
-            <ProjectsWrapper>
-                {projects.slice(0, 1).map((project) => (
-                    <DefaultItemWrapper
-                        key={project.id}
-                        onClick={() =>
-                            dispatch(changeActiveProject(project.id))
-                        }>
-                        <FontAwesomeIcon icon={faInbox} />
-                        {project.projectName}
-                    </DefaultItemWrapper>
-                ))}
-            </ProjectsWrapper>
-            <h1>Projects</h1>
-            <ProjectsWrapper>
-                {projects.slice(1).map((project) => (
-                    <ProjectItem key={project.id} project={project} />
-                ))}
-            </ProjectsWrapper>
-            <Button onClick={() => dispatch(openProject())}>
-                <FontAwesomeIcon icon={faPlus} /> Add Project
-            </Button>
-        </NavWrapper>
+        <>
+            <NavWrapper>
+                <ProjectsWrapper>
+                    {projects.slice(0, 1).map((project) => (
+                        <DefaultItemWrapper
+                            key={project.id}
+                            onClick={() =>
+                                dispatch(changeActiveProject(project.id))
+                            }>
+                            <FontAwesomeIcon icon={faInbox} />
+                            {project.projectName}
+                        </DefaultItemWrapper>
+                    ))}
+                </ProjectsWrapper>
+                <h1>Projects</h1>
+                <ProjectsWrapper>
+                    {projects.slice(1).map((project) => (
+                        <ProjectItem key={project.id} project={project} />
+                    ))}
+                </ProjectsWrapper>
+                <Button onClick={() => dispatch(openProject())}>
+                    <FontAwesomeIcon icon={faPlus} /> Add Project
+                </Button>
+            </NavWrapper>
+            {show && <ProjectModal />}
+        </>
     );
 };
 

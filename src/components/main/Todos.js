@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { TodoModal } from '../modal/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Todo from './Todo';
@@ -7,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openTodo } from '../../redux/todoModal';
 
 const Todos = () => {
+    const { show } = useSelector((state) => state.todoModal);
     const { projects } = useSelector((state) => state.data);
     const dispatch = useDispatch();
 
@@ -17,21 +19,24 @@ const Todos = () => {
     }
 
     return (
-        <TodosWrapper>
-            <h1>{activeProject.projectName}</h1>
-            <div>
-                {activeProject.todos.map((todo) => (
-                    <Todo
-                        key={todo.id}
-                        todo={todo}
-                        activeProject={activeProject}
-                    />
-                ))}
-            </div>
-            <Button onClick={() => dispatch(openTodo())}>
-                <FontAwesomeIcon icon={faPlus} /> Add Task
-            </Button>
-        </TodosWrapper>
+        <>
+            <TodosWrapper>
+                <h1>{activeProject.projectName}</h1>
+                <div>
+                    {activeProject.todos.map((todo) => (
+                        <Todo
+                            key={todo.id}
+                            todo={todo}
+                            activeProject={activeProject}
+                        />
+                    ))}
+                </div>
+                <Button onClick={() => dispatch(openTodo())}>
+                    <FontAwesomeIcon icon={faPlus} /> Add Task
+                </Button>
+            </TodosWrapper>
+            {show && <TodoModal />}
+        </>
     );
 };
 

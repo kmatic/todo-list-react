@@ -2,7 +2,6 @@ import React from 'react';
 import Nav from './main/Nav';
 import Todos from './main/Todos';
 import styled from 'styled-components';
-import { ProjectModal, TodoModal } from './modal/Modal';
 
 const Main = () => {
     return (
@@ -11,8 +10,6 @@ const Main = () => {
                 <Nav />
                 <Todos />
             </MainWrapper>
-            <ProjectModal />
-            <TodoModal />
         </>
     );
 };

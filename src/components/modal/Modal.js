@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import ReactDOM from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeProject } from '../../redux/projectModal';
 import { closeTodo } from '../../redux/todoModal';
@@ -13,7 +14,6 @@ import {
 } from '../../redux/data';
 
 export const ProjectModal = () => {
-    const { show } = useSelector((state) => state.projectModal);
     const { project } = useSelector((state) => state.data);
     const dispatch = useDispatch();
 
@@ -24,11 +24,7 @@ export const ProjectModal = () => {
         dispatch(changeActiveProject(projectId));
     };
 
-    if (!show) {
-        return null;
-    }
-
-    return (
+    return ReactDOM.createPortal(
         <ModalWrapper onClick={() => dispatch(closeProject())}>
             <ModalContainer onClick={(e) => e.stopPropagation()}>
                 <Header>
@@ -55,12 +51,12 @@ export const ProjectModal = () => {
                     </div>
                 </form>
             </ModalContainer>
-        </ModalWrapper>
+        </ModalWrapper>,
+        document.getElementById('modal'),
     );
 };
 
 export const TodoModal = () => {
-    const { show } = useSelector((state) => state.todoModal);
     const { todo, projects } = useSelector((state) => state.data);
     const dispatch = useDispatch();
 
@@ -91,11 +87,7 @@ export const TodoModal = () => {
         dispatch(clearTodoFields());
     };
 
-    if (!show) {
-        return null;
-    }
-
-    return (
+    return ReactDOM.createPortal(
         <ModalWrapper onClick={() => onClose()}>
             <ModalContainer onClick={(e) => e.stopPropagation()}>
                 <Header>
@@ -148,7 +140,8 @@ export const TodoModal = () => {
                     </div>
                 </form>
             </ModalContainer>
-        </ModalWrapper>
+        </ModalWrapper>,
+        document.getElementById('modal'),
     );
 };
 
