@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import ReactDOM from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeProject } from '../../redux/projectModal';
-import { closeTodo } from '../../redux/todoModal';
+import { closeProject } from '../../redux/features/projectModal';
+import { closeTodo } from '../../redux/features/todoModal';
 import {
     handleProject,
     addProject,
@@ -11,7 +11,10 @@ import {
     addTodo,
     clearTodoFields,
     changeActiveProject,
-} from '../../redux/data';
+} from '../../redux/features/data';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../../firebase/config';
+import { setActiveUser } from '../../redux/features/auth';
 
 export const ProjectModal = () => {
     const { project } = useSelector((state) => state.data);
@@ -145,6 +148,51 @@ export const TodoModal = () => {
     );
 };
 
+export const Login = () => {
+    const { isLogged } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const provider = new GoogleAuthProvider();
+
+    const googleSignIn = (e) => {
+        e.preventDefault();
+
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const data = {
+                    email: result.user.email,
+                    displayName: result.user.displayName,
+                    userID: result.user.uid,
+                };
+                dispatch(setActiveUser(data));
+            })
+            .catch((error) => {
+                // Handle Errors here.
+                throw new Error(error.message);
+            });
+    };
+
+    if (isLogged) {
+        return null;
+    }
+
+    return ReactDOM.createPortal(
+        <ModalWrapper>
+            <ModalContainer>
+                <Header>
+                    <h2>Get Started</h2>
+                </Header>
+                <form onSubmit={(e) => googleSignIn(e)}>
+                    <div>
+                        <p>Sign in to create todos and manage your tasks</p>
+                        <ModalButton google>Continue with Google</ModalButton>
+                    </div>
+                </form>
+            </ModalContainer>
+        </ModalWrapper>,
+        document.getElementById('modal'),
+    );
+};
+
 const ModalWrapper = styled.div`
     position: fixed;
     left: 0;
@@ -211,7 +259,7 @@ const Header = styled.div`
 
 const ModalButton = styled.button`
     padding: 8px;
-    background-color: green;
+    background-color: ${(props) => (props.google ? '#DB4437' : 'green')};
     color: white;
     border: none;
     border-radius: 4px;

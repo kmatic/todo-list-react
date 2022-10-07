@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { ProjectModal } from '../modal/Modal';
 import { useSelector, useDispatch } from 'react-redux';
-import { openProject } from '../../redux/projectModal';
-import { delProject, changeActiveProject } from '../../redux/data';
+import { openProject } from '../../redux/features/projectModal';
+import { delProject, changeActiveProject } from '../../redux/features/data';
 import {
     faInbox,
     faPlus,
@@ -19,6 +19,7 @@ const Nav = () => {
 
     return (
         <>
+            {show && <ProjectModal />}
             <NavWrapper>
                 <ProjectsWrapper>
                     {projects.slice(0, 1).map((project) => (
@@ -42,7 +43,6 @@ const Nav = () => {
                     <FontAwesomeIcon icon={faPlus} /> Add Project
                 </Button>
             </NavWrapper>
-            {show && <ProjectModal />}
         </>
     );
 };

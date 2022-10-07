@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Todo from './Todo';
 import { useDispatch, useSelector } from 'react-redux';
-import { openTodo } from '../../redux/todoModal';
+import { openTodo } from '../../redux/features/todoModal';
 
 const Todos = () => {
     const { show } = useSelector((state) => state.todoModal);
@@ -20,6 +20,7 @@ const Todos = () => {
 
     return (
         <>
+            {show && <TodoModal />}
             <TodosWrapper>
                 <h1>{activeProject.projectName}</h1>
                 <div>
@@ -35,7 +36,6 @@ const Todos = () => {
                     <FontAwesomeIcon icon={faPlus} /> Add Task
                 </Button>
             </TodosWrapper>
-            {show && <TodoModal />}
         </>
     );
 };

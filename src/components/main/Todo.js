@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-import { delTodo, editTodo } from '../../redux/data';
+import { delTodo, editTodo } from '../../redux/features/data';
 import { useDispatch } from 'react-redux';
-import { openTodo } from '../../redux/todoModal';
+import { openTodo } from '../../redux/features/todoModal';
 
 const Todo = ({ todo, activeProject }) => {
     const [showDetails, setShowDetails] = useState(false);
