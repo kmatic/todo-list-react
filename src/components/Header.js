@@ -2,15 +2,18 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { auth } from '../firebase/config';
 import { signOut } from 'firebase/auth';
+import { clearActiveUser } from '../redux/features/auth';
 
 const Header = () => {
     const { displayName, isLogged } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
 
     const signOutUser = () => {
         signOut(auth);
+        dispatch(clearActiveUser());
     };
 
     return (

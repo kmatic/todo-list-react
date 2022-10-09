@@ -149,7 +149,6 @@ export const TodoModal = () => {
 };
 
 export const Login = () => {
-    const { isLogged } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const provider = new GoogleAuthProvider();
 
@@ -170,10 +169,6 @@ export const Login = () => {
                 throw new Error(error.message);
             });
     };
-
-    if (isLogged) {
-        return null;
-    }
 
     return ReactDOM.createPortal(
         <ModalWrapper>
