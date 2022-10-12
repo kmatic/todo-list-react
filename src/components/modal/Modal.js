@@ -6,7 +6,7 @@ import { closeProject } from '../../redux/features/projectModal';
 import { closeTodo } from '../../redux/features/todoModal';
 import {
     handleProject,
-    addProject,
+    clearProject,
     handleTodo,
     addTodo,
     clearTodoFields,
@@ -23,11 +23,11 @@ export const ProjectModal = () => {
     const { userID } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
-    const projectRef = collection(db, `users/${userID}/projects`);
+    const projectsRef = collection(db, `users/${userID}/projects`);
 
     const addProjectById = async () => {
         try {
-            await addDoc(projectRef, project);
+            await setDoc(doc(projectsRef, project.id), project);
         } catch (error) {
             console.error('Error adding project to firebase database', error);
         }
@@ -36,7 +36,7 @@ export const ProjectModal = () => {
     const onSubmit = (e, projectId) => {
         e.preventDefault();
         addProjectById();
-        dispatch(addProject());
+        dispatch(clearProject());
         dispatch(closeProject());
         dispatch(changeActiveProject(projectId));
     };

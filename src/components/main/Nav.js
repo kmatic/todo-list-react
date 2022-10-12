@@ -11,6 +11,8 @@ import {
     faCalendarDays,
     faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
+import { doc, deleteDoc, collection } from 'firebase/firestore';
+import { db } from '../../firebase/config';
 
 const Nav = () => {
     const { projects } = useSelector((state) => state.data);
@@ -49,10 +51,24 @@ const Nav = () => {
 
 const ProjectItem = ({ project }) => {
     const dispatch = useDispatch();
+    const { userID } = useSelector((state) => state.auth);
 
     const dispatchDelete = (e, id) => {
         e.stopPropagation();
-        dispatch(delProject(id));
+        delProjectById(id);
+        // dispatch(delProject(id));
+    };
+
+    const delProjectById = async (id) => {
+        try {
+            const projectsRef = collection(db, `users/${userID}/projects`);
+            await deleteDoc(doc(projectsRef, id));
+        } catch (error) {
+            console.error(
+                'Error deleting project from firebase database',
+                error,
+            );
+        }
     };
 
     return (

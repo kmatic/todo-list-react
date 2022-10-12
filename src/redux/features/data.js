@@ -40,8 +40,7 @@ export const dataSlice = createSlice({
         handleProject: (state, action) => {
             state.project.projectName = action.payload;
         },
-        addProject: (state) => {
-            state.projects.push(state.project);
+        clearProject: (state) => {
             state.project = {
                 id: uuidv4(),
                 projectName: '',
@@ -162,7 +161,7 @@ export const dataSlice = createSlice({
 
 export const {
     handleProject,
-    addProject,
+    clearProject,
     delProject,
     handleTodo,
     addTodo,
