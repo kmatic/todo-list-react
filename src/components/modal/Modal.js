@@ -8,43 +8,26 @@ import {
     handleProject,
     clearProject,
     handleTodo,
-    addTodo,
     clearTodoFields,
     changeActiveProject,
+    addProject,
+    addTodoById,
 } from '../../redux/features/data';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../../firebase/config';
 import { setActiveUser } from '../../redux/features/auth';
-import { db } from '../../firebase/config';
-import {
-    collection,
-    doc,
-    setDoc,
-    addDoc,
-    updateDoc,
-    arrayUnion,
-} from 'firebase/firestore';
 
 export const ProjectModal = () => {
     const { project } = useSelector((state) => state.data);
     const { userID } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
-    const addProjectById = async () => {
-        try {
-            const projectsRef = collection(db, `users/${userID}/projects`);
-            await setDoc(doc(projectsRef, project.id), project);
-        } catch (error) {
-            console.error('Error adding project to firebase database', error);
-        }
-    };
-
-    const onSubmit = (e, projectId) => {
+    const onSubmit = (e, project) => {
         e.preventDefault();
-        addProjectById();
+        dispatch(addProject({ userID, project }));
         dispatch(clearProject());
         dispatch(closeProject());
-        dispatch(changeActiveProject(projectId));
+        dispatch(changeActiveProject(project.id));
     };
 
     return ReactDOM.createPortal(
@@ -56,7 +39,7 @@ export const ProjectModal = () => {
                         &times;
                     </span>
                 </Header>
-                <form onSubmit={(e) => onSubmit(e, project.id)}>
+                <form onSubmit={(e) => onSubmit(e, project)}>
                     <div>
                         <label htmlFor="projectName">Name: *</label>
                         <input
@@ -80,43 +63,22 @@ export const ProjectModal = () => {
 };
 
 export const TodoModal = () => {
-    const { todo, projects, active } = useSelector((state) => state.data);
+    const { todo, active } = useSelector((state) => state.data);
     const { userID } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-
-    const activeProject = projects.find((project) => project.id === active);
 
     const onChange = (e) => {
         const payload = {
             name: e.target.name,
             value: e.target.value,
         };
-
         dispatch(handleTodo(payload));
     };
 
-    const addTodoById = async () => {
-        try {
-            const todosRef = doc(
-                db,
-                `users/${userID}/projects/${activeProject.id}`,
-            );
-            await updateDoc(todosRef, {
-                todos: arrayUnion(todo),
-            });
-        } catch (error) {
-            console.error('Error adding todo to firebase database', error);
-        }
-    };
-
-    const onSubmit = (e, projectId, todoId) => {
+    const onSubmit = (e) => {
         e.preventDefault();
-        const payload = {
-            projectId,
-            todoId,
-        };
         addTodoById();
-        // dispatch(addTodo(payload));
+        dispatch(addTodoById({ userID, active, todo }));
         dispatch(closeTodo());
         dispatch(clearTodoFields());
     };
@@ -133,7 +95,7 @@ export const TodoModal = () => {
                     <h2>New Todo</h2>
                     <span onClick={() => onClose()}>&times;</span>
                 </Header>
-                <form onSubmit={(e) => onSubmit(e, activeProject.id, todo.id)}>
+                <form onSubmit={(e) => onSubmit(e)}>
                     <div>
                         <label htmlFor="title">Title: *</label>
                         <input

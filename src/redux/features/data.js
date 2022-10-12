@@ -1,18 +1,63 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/config';
+import {
+    collection,
+    doc,
+    getDocs,
+    setDoc,
+    deleteDoc,
+    updateDoc,
+    arrayUnion,
+    arrayRemove,
+} from 'firebase/firestore';
 
 export const getProjects = createAsyncThunk(
     'users/getProjects',
-    async (userId) => {
+    async (userID) => {
         let data = [];
-        const collectionRef = collection(db, `users/${userId}/projects`);
-        const querySnapshot = await getDocs(collectionRef);
+        const projectsRef = collection(db, `users/${userID}/projects`);
+        const querySnapshot = await getDocs(projectsRef);
         querySnapshot.forEach((doc) => {
             data.push(doc.data());
         });
         return data;
+    },
+);
+
+export const addProject = createAsyncThunk(
+    'users/addProject',
+    async ({ userID, project }) => {
+        const projectsRef = collection(db, `users/${userID}/projects`);
+        await setDoc(doc(projectsRef, project.id), project);
+    },
+);
+
+export const delProjectById = createAsyncThunk(
+    'users/delProject',
+    async ({ userID, id }) => {
+        const projectsRef = collection(db, `users/${userID}/projects`);
+        await deleteDoc(doc(projectsRef, id));
+    },
+);
+
+export const addTodoById = createAsyncThunk(
+    'users/addTodo',
+    async ({ userID, active, todo }) => {
+        const todosRef = doc(db, `users/${userID}/projects/${active}`);
+        await updateDoc(todosRef, {
+            todos: arrayUnion(todo),
+        });
+    },
+);
+
+export const delTodoById = createAsyncThunk(
+    'users/delTodo',
+    async ({ userID, active, todo }) => {
+        const todosRef = doc(db, `users/${userID}/projects/${active}`);
+        await updateDoc(todosRef, {
+            todos: arrayRemove(todo),
+        });
     },
 );
 
@@ -156,6 +201,25 @@ export const dataSlice = createSlice({
     extraReducers: {
         [getProjects.fulfilled]: (state, action) => {
             state.projects = action.payload;
+            console.log('getProjects fulfilled');
+        },
+        [getProjects.pending]: (state) => {
+            console.log('getProjects pending');
+        },
+        [getProjects.rejected]: (state) => {
+            console.error('Error getting projects for firestore');
+        },
+        [addProject.fulfilled]: (state) => {
+            console.log('project added');
+        },
+        [delProjectById.fulfilled]: (state) => {
+            console.log('project deleted');
+        },
+        [addTodoById.fulfilled]: (state) => {
+            console.log('todo added');
+        },
+        [delTodoById.fulfilled]: (state) => {
+            console.log('todo deleted');
         },
     },
 });

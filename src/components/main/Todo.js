@@ -3,41 +3,20 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-import { delTodo, editTodo } from '../../redux/features/data';
+import { editTodo, delTodoById } from '../../redux/features/data';
 import { useDispatch, useSelector } from 'react-redux';
 import { openTodo } from '../../redux/features/todoModal';
-import { arrayRemove, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../firebase/config';
 
 const Todo = ({ todo, activeProject }) => {
     const [showDetails, setShowDetails] = useState(false);
     const dispatch = useDispatch();
     const { userID } = useSelector((state) => state.auth);
 
-    const delTodoById = async (todo) => {
-        try {
-            const todosRef = doc(
-                db,
-                `users/${userID}/projects/${activeProject.id}`,
-            );
-            await updateDoc(todosRef, {
-                todos: arrayRemove(todo),
-            });
-        } catch (error) {
-            console.error('Error deleting todo to firebase database', error);
-        }
-    };
-
     const dispatchDelete = (todo) => {
-        // dispatch(
-        //     delTodo({
-        //         projectId: activeProject.id,
-        //         todoId: todo.id,
-        //     })
-        delTodoById(todo);
+        dispatch(delTodoById({ userID, active: activeProject.id, todo }));
     };
 
-    const dispatchEdit = (e, projectId, todoId) => {
+    const dispatchEdit = (e, projectId, todoId, todo) => {
         e.stopPropagation();
 
         const payload = {
@@ -45,6 +24,7 @@ const Todo = ({ todo, activeProject }) => {
             todoId,
         };
 
+        delTodoById(todo);
         dispatch(editTodo(payload));
         dispatch(openTodo());
     };
@@ -64,7 +44,7 @@ const Todo = ({ todo, activeProject }) => {
                     <Icon
                         icon={faPen}
                         onClick={(e) =>
-                            dispatchEdit(e, activeProject.id, todo.id)
+                            dispatchEdit(e, activeProject.id, todo.id, todo)
                         }
                     />
                     <Icon

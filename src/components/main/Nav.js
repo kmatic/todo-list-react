@@ -4,15 +4,13 @@ import styled from 'styled-components';
 import { ProjectModal } from '../modal/Modal';
 import { useSelector, useDispatch } from 'react-redux';
 import { openProject } from '../../redux/features/projectModal';
-import { delProject, changeActiveProject } from '../../redux/features/data';
+import { changeActiveProject, delProjectById } from '../../redux/features/data';
 import {
     faInbox,
     faPlus,
     faCalendarDays,
     faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
-import { doc, deleteDoc, collection } from 'firebase/firestore';
-import { db } from '../../firebase/config';
 
 const Nav = () => {
     const { projects } = useSelector((state) => state.data);
@@ -55,20 +53,7 @@ const ProjectItem = ({ project }) => {
 
     const dispatchDelete = (e, id) => {
         e.stopPropagation();
-        delProjectById(id);
-        // dispatch(delProject(id));
-    };
-
-    const delProjectById = async (id) => {
-        try {
-            const projectsRef = collection(db, `users/${userID}/projects`);
-            await deleteDoc(doc(projectsRef, id));
-        } catch (error) {
-            console.error(
-                'Error deleting project from firebase database',
-                error,
-            );
-        }
+        dispatch(delProjectById({ userID, id }));
     };
 
     return (
