@@ -7,7 +7,9 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/config';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveUser, clearActiveUser } from './redux/features/auth';
-import { getProjects } from './redux/features/data';
+import { setProjects } from './redux/features/data';
+import { onSnapshot, collection, query, orderBy } from 'firebase/firestore';
+import { db } from './firebase/config';
 
 function App() {
     const dispatch = useDispatch();
@@ -18,12 +20,24 @@ function App() {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-        }, 2000);
+        }, 1000);
     }, []);
 
     useEffect(() => {
-        dispatch(getProjects(userID));
-    }, [dispatch, userID]);
+        const projectsRef = collection(db, `users/${userID}/projects`);
+        const unsubscribe = onSnapshot(
+            query(projectsRef, orderBy('timestamp')),
+            (snapshot) => {
+                let projects = [];
+                snapshot.docs.forEach((doc) => {
+                    projects.push(doc.data());
+                });
+                dispatch(setProjects(projects));
+            },
+        );
+
+        return () => unsubscribe();
+    }, [userID, dispatch]);
 
     useEffect(() => {
         // setLoading(true);

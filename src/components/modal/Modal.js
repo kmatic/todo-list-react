@@ -4,6 +4,9 @@ import ReactDOM from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeProject } from '../../redux/features/projectModal';
 import { closeTodo } from '../../redux/features/todoModal';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../../firebase/config';
+import { setActiveUser } from '../../redux/features/auth';
 import {
     handleProject,
     clearProject,
@@ -13,9 +16,6 @@ import {
     addProject,
     addTodoById,
 } from '../../redux/features/data';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '../../firebase/config';
-import { setActiveUser } from '../../redux/features/auth';
 
 export const ProjectModal = () => {
     const { project } = useSelector((state) => state.data);

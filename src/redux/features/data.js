@@ -82,13 +82,16 @@ const initialState = {
         dueDate: '',
         priority: 'High',
     },
-    projects: [{ id: uuidv4(), projectName: 'Inbox', todos: [] }],
+    projects: [],
 };
 
 export const dataSlice = createSlice({
     name: 'data',
     initialState,
     reducers: {
+        setProjects: (state, action) => {
+            state.projects = action.payload;
+        },
         handleProject: (state, action) => {
             state.project.projectName = action.payload;
         },
@@ -232,6 +235,7 @@ export const dataSlice = createSlice({
 });
 
 export const {
+    setProjects,
     handleProject,
     clearProject,
     delProject,

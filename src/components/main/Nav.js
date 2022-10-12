@@ -6,10 +6,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { openProject } from '../../redux/features/projectModal';
 import { changeActiveProject, delProjectById } from '../../redux/features/data';
 import {
-    faInbox,
     faPlus,
-    faCalendarDays,
     faTrashCan,
+    faFolderClosed,
 } from '@fortawesome/free-solid-svg-icons';
 
 const Nav = () => {
@@ -21,7 +20,7 @@ const Nav = () => {
         <>
             {show && <ProjectModal />}
             <NavWrapper>
-                <ProjectsWrapper>
+                {/* <ProjectsWrapper>
                     {projects.slice(0, 1).map((project) => (
                         <DefaultItemWrapper
                             key={project.id}
@@ -32,10 +31,10 @@ const Nav = () => {
                             {project.projectName}
                         </DefaultItemWrapper>
                     ))}
-                </ProjectsWrapper>
+                </ProjectsWrapper> */}
                 <h1>Projects</h1>
                 <ProjectsWrapper>
-                    {projects.slice(1).map((project) => (
+                    {projects.map((project) => (
                         <ProjectItem key={project.id} project={project} />
                     ))}
                 </ProjectsWrapper>
@@ -60,7 +59,7 @@ const ProjectItem = ({ project }) => {
         <ProjectItemWrapper
             onClick={() => dispatch(changeActiveProject(project.id))}>
             <div>
-                <FontAwesomeIcon icon={faCalendarDays} />
+                <FontAwesomeIcon icon={faFolderClosed} />
                 <p>{project.projectName}</p>
             </div>
             <FontAwesomeIcon
