@@ -15,13 +15,27 @@ import {
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../../firebase/config';
 import { setActiveUser } from '../../redux/features/auth';
+import { db } from '../../firebase/config';
+import { collection, doc, setDoc, addDoc } from 'firebase/firestore';
 
 export const ProjectModal = () => {
     const { project } = useSelector((state) => state.data);
+    const { userID } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
+
+    const projectRef = collection(db, `users/${userID}/projects`);
+
+    const addProjectById = async () => {
+        try {
+            await addDoc(projectRef, project);
+        } catch (error) {
+            console.error('Error adding project to firebase database', error);
+        }
+    };
 
     const onSubmit = (e, projectId) => {
         e.preventDefault();
+        addProjectById();
         dispatch(addProject());
         dispatch(closeProject());
         dispatch(changeActiveProject(projectId));

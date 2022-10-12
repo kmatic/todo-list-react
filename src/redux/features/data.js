@@ -1,5 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase/config';
+
+export const getProjects = createAsyncThunk(
+    'users/getProjects',
+    async (userId) => {
+        let data = [];
+        const collectionRef = collection(db, `users/${userId}/projects`);
+        const querySnapshot = await getDocs(collectionRef);
+        querySnapshot.forEach((doc) => {
+            data.push(doc.data());
+        });
+        return data;
+    },
+);
 
 const initialState = {
     project: {
@@ -136,6 +151,11 @@ export const dataSlice = createSlice({
                 dueDate: '',
                 priority: 'High',
             };
+        },
+    },
+    extraReducers: {
+        [getProjects.fulfilled]: (state, action) => {
+            state.projects = action.payload;
         },
     },
 });

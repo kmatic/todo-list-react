@@ -11,4 +11,10 @@ export const store = configureStore({
         data: dataReducer,
         auth: authReducer,
     },
+    middleware: (getDefaultMiddleWare) =>
+        getDefaultMiddleWare({
+            serializableCheck: {
+                ignoredActions: ['users/getProjects/fulfilled'],
+            },
+        }),
 });
