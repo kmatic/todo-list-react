@@ -7,18 +7,23 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/config';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveUser, clearActiveUser } from './redux/features/auth';
+import { getProjects } from './redux/features/data';
 
 function App() {
     const dispatch = useDispatch();
-    const { isLogged } = useSelector((state) => state.auth);
+    const { isLogged, userID } = useSelector((state) => state.auth);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-        }, 500);
+        }, 2000);
     }, []);
+
+    useEffect(() => {
+        dispatch(getProjects(userID));
+    }, [dispatch, userID]);
 
     useEffect(() => {
         // setLoading(true);

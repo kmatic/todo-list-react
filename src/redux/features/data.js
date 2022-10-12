@@ -17,11 +17,11 @@ export const getProjects = createAsyncThunk(
 );
 
 const initialState = {
+    active: null,
     project: {
         id: uuidv4(),
         projectName: '',
         todos: [],
-        active: false,
     },
     todo: {
         id: uuidv4(),
@@ -30,7 +30,7 @@ const initialState = {
         dueDate: '',
         priority: 'High',
     },
-    projects: [{ id: uuidv4(), projectName: 'Inbox', todos: [], active: true }],
+    projects: [{ id: uuidv4(), projectName: 'Inbox', todos: [] }],
 };
 
 export const dataSlice = createSlice({
@@ -109,13 +109,14 @@ export const dataSlice = createSlice({
             };
         },
         changeActiveProject: (state, action) => {
-            for (const project of state.projects) {
-                if (project.id === action.payload) {
-                    project.active = true;
-                } else if (project.active === true) {
-                    project.active = false;
-                }
-            }
+            // for (const project of state.projects) {
+            //     if (project.id === action.payload) {
+            //         project.active = true;
+            //     } else if (project.active === true) {
+            //         project.active = false;
+            //     }
+            // }
+            state.active = action.payload;
         },
         delTodo: (state, action) => {
             const { projectId, todoId } = action.payload;
