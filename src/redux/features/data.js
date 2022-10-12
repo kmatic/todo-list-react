@@ -10,6 +10,8 @@ import {
     updateDoc,
     arrayUnion,
     arrayRemove,
+    orderBy,
+    query,
 } from 'firebase/firestore';
 
 export const getProjects = createAsyncThunk(
@@ -17,7 +19,9 @@ export const getProjects = createAsyncThunk(
     async (userID) => {
         let data = [];
         const projectsRef = collection(db, `users/${userID}/projects`);
-        const querySnapshot = await getDocs(projectsRef);
+        const querySnapshot = await getDocs(
+            query(projectsRef, orderBy('timestamp')),
+        );
         querySnapshot.forEach((doc) => {
             data.push(doc.data());
         });
@@ -29,7 +33,10 @@ export const addProject = createAsyncThunk(
     'users/addProject',
     async ({ userID, project }) => {
         const projectsRef = collection(db, `users/${userID}/projects`);
-        await setDoc(doc(projectsRef, project.id), project);
+        return await setDoc(doc(projectsRef, project.id), {
+            ...project,
+            timestamp: Date.now(),
+        });
     },
 );
 
@@ -37,7 +44,7 @@ export const delProjectById = createAsyncThunk(
     'users/delProject',
     async ({ userID, id }) => {
         const projectsRef = collection(db, `users/${userID}/projects`);
-        await deleteDoc(doc(projectsRef, id));
+        return await deleteDoc(doc(projectsRef, id));
     },
 );
 
@@ -92,12 +99,12 @@ export const dataSlice = createSlice({
                 todos: [],
             };
         },
-        delProject: (state, action) => {
-            const newProjects = state.projects.filter(
-                (project) => project.id !== action.payload,
-            );
-            state.projects = newProjects;
-        },
+        // delProject: (state, action) => {
+        //     const newProjects = state.projects.filter(
+        //         (project) => project.id !== action.payload,
+        //     );
+        //     state.projects = newProjects;
+        // },
         handleTodo: (state, action) => {
             const { name, value } = action.payload;
             state.todo = {
@@ -105,54 +112,54 @@ export const dataSlice = createSlice({
                 [name]: value,
             };
         },
-        addTodo: (state, action) => {
-            let updatedProjects;
-            const { projectId, todoId } = action.payload;
-            const activeProject = state.projects.find(
-                (project) => project.id === projectId,
-            );
+        // addTodo: (state, action) => {
+        //     let updatedProjects;
+        //     const { projectId, todoId } = action.payload;
+        //     const activeProject = state.projects.find(
+        //         (project) => project.id === projectId,
+        //     );
 
-            if (activeProject.todos.find((todo) => todo.id === todoId)) {
-                let updatedTodos = activeProject.todos.map((todo) => {
-                    if (todo.id === todoId) {
-                        return {
-                            id: state.todo.id,
-                            title: state.todo.title,
-                            description: state.todo.description,
-                            dueDate: state.todo.dueDate,
-                            priority: state.todo.priority,
-                        };
-                    }
-                    return todo;
-                });
+        //     if (activeProject.todos.find((todo) => todo.id === todoId)) {
+        //         let updatedTodos = activeProject.todos.map((todo) => {
+        //             if (todo.id === todoId) {
+        //                 return {
+        //                     id: state.todo.id,
+        //                     title: state.todo.title,
+        //                     description: state.todo.description,
+        //                     dueDate: state.todo.dueDate,
+        //                     priority: state.todo.priority,
+        //                 };
+        //             }
+        //             return todo;
+        //         });
 
-                updatedProjects = state.projects.map((project) => {
-                    if (project.id === projectId) {
-                        return { ...project, todos: updatedTodos };
-                    }
-                    return project;
-                });
-            } else {
-                updatedProjects = state.projects.map((project) => {
-                    if (project.id === projectId) {
-                        return {
-                            ...project,
-                            todos: [...project.todos, state.todo],
-                        };
-                    }
-                    return project;
-                });
-            }
+        //         updatedProjects = state.projects.map((project) => {
+        //             if (project.id === projectId) {
+        //                 return { ...project, todos: updatedTodos };
+        //             }
+        //             return project;
+        //         });
+        //     } else {
+        //         updatedProjects = state.projects.map((project) => {
+        //             if (project.id === projectId) {
+        //                 return {
+        //                     ...project,
+        //                     todos: [...project.todos, state.todo],
+        //                 };
+        //             }
+        //             return project;
+        //         });
+        //     }
 
-            state.projects = updatedProjects;
-            state.todo = {
-                id: uuidv4(),
-                title: '',
-                description: '',
-                dueDate: '',
-                priority: 'High',
-            };
-        },
+        //     state.projects = updatedProjects;
+        //     state.todo = {
+        //         id: uuidv4(),
+        //         title: '',
+        //         description: '',
+        //         dueDate: '',
+        //         priority: 'High',
+        //     };
+        // },
         changeActiveProject: (state, action) => {
             // for (const project of state.projects) {
             //     if (project.id === action.payload) {
@@ -163,17 +170,17 @@ export const dataSlice = createSlice({
             // }
             state.active = action.payload;
         },
-        delTodo: (state, action) => {
-            const { projectId, todoId } = action.payload;
+        // delTodo: (state, action) => {
+        //     const { projectId, todoId } = action.payload;
 
-            for (const project of state.projects) {
-                if (project.id === projectId) {
-                    project.todos = project.todos.filter(
-                        (todo) => todo.id !== todoId,
-                    );
-                }
-            }
-        },
+        //     for (const project of state.projects) {
+        //         if (project.id === projectId) {
+        //             project.todos = project.todos.filter(
+        //                 (todo) => todo.id !== todoId,
+        //             );
+        //         }
+        //     }
+        // },
         editTodo: (state, action) => {
             const { projectId, todoId } = action.payload;
 
