@@ -8,10 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openTodo } from '../../redux/features/todoModal';
 
 const Todos = () => {
+    const dispatch = useDispatch();
     const { show } = useSelector((state) => state.todoModal);
     const { projects, active } = useSelector((state) => state.data);
-    const dispatch = useDispatch();
-
     const activeProject = projects.find((project) => project.id === active);
 
     if (!activeProject) {

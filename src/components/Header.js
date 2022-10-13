@@ -26,7 +26,7 @@ const Header = () => {
                 <>
                     <div>
                         <div>
-                            <p>Hi {displayName}</p>
+                            <p>Hi, {displayName}</p>
                         </div>
                         <Button type="submit" onClick={() => signOutUser()}>
                             Logout

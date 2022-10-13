@@ -12,11 +12,12 @@ const Todo = ({ todo, activeProject }) => {
     const dispatch = useDispatch();
     const { userID } = useSelector((state) => state.auth);
 
-    const dispatchDelete = (todo) => {
+    const dispatchDelete = (e, todo) => {
+        e.stopPropagation();
         dispatch(delTodoById({ userID, active: activeProject.id, todo }));
     };
 
-    const dispatchEdit = (e, projectId, todoId, todo) => {
+    const dispatchEdit = (e, projectId, todoId) => {
         e.stopPropagation();
 
         const payload = {
@@ -24,7 +25,6 @@ const Todo = ({ todo, activeProject }) => {
             todoId,
         };
 
-        delTodoById(todo);
         dispatch(editTodo(payload));
         dispatch(openTodo());
     };
@@ -49,7 +49,7 @@ const Todo = ({ todo, activeProject }) => {
                     />
                     <Icon
                         icon={faTrashCan}
-                        onClick={() => dispatchDelete(todo)}
+                        onClick={(e) => dispatchDelete(e, todo)}
                     />
                 </div>
             </TodoWrapper>

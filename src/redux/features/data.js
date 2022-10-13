@@ -4,30 +4,12 @@ import { db } from '../../firebase/config';
 import {
     collection,
     doc,
-    getDocs,
     setDoc,
     deleteDoc,
     updateDoc,
     arrayUnion,
     arrayRemove,
-    orderBy,
-    query,
 } from 'firebase/firestore';
-
-export const getProjects = createAsyncThunk(
-    'users/getProjects',
-    async (userID) => {
-        let data = [];
-        const projectsRef = collection(db, `users/${userID}/projects`);
-        const querySnapshot = await getDocs(
-            query(projectsRef, orderBy('timestamp')),
-        );
-        querySnapshot.forEach((doc) => {
-            data.push(doc.data());
-        });
-        return data;
-    },
-);
 
 export const addProject = createAsyncThunk(
     'users/addProject',
@@ -82,6 +64,7 @@ const initialState = {
         dueDate: '',
         priority: 'High',
     },
+    tempTodo: null,
     projects: [],
 };
 
@@ -194,7 +177,7 @@ export const dataSlice = createSlice({
             const editedTodo = activeProject.todos.find(
                 (todo) => todo.id === todoId,
             );
-
+            state.tempTodo = editedTodo;
             state.todo = editedTodo;
         },
         clearTodoFields: (state) => {
@@ -207,28 +190,21 @@ export const dataSlice = createSlice({
                 priority: 'High',
             };
         },
+        clearTempTodo: (state) => {
+            state.tempTodo = null;
+        },
     },
     extraReducers: {
-        [getProjects.fulfilled]: (state, action) => {
-            state.projects = action.payload;
-            console.log('getProjects fulfilled');
-        },
-        [getProjects.pending]: (state) => {
-            console.log('getProjects pending');
-        },
-        [getProjects.rejected]: (state) => {
-            console.error('Error getting projects for firestore');
-        },
-        [addProject.fulfilled]: (state) => {
+        [addProject.fulfilled]: () => {
             console.log('project added');
         },
-        [delProjectById.fulfilled]: (state) => {
+        [delProjectById.fulfilled]: () => {
             console.log('project deleted');
         },
-        [addTodoById.fulfilled]: (state) => {
+        [addTodoById.fulfilled]: () => {
             console.log('todo added');
         },
-        [delTodoById.fulfilled]: (state) => {
+        [delTodoById.fulfilled]: () => {
             console.log('todo deleted');
         },
     },
@@ -238,13 +214,11 @@ export const {
     setProjects,
     handleProject,
     clearProject,
-    delProject,
     handleTodo,
-    addTodo,
     changeActiveProject,
-    delTodo,
     editTodo,
     clearTodoFields,
+    clearTempTodo,
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

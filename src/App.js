@@ -20,7 +20,7 @@ function App() {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-        }, 1000);
+        }, 400);
     }, []);
 
     useEffect(() => {
@@ -40,7 +40,6 @@ function App() {
     }, [userID, dispatch]);
 
     useEffect(() => {
-        // setLoading(true);
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 const data = {
@@ -49,10 +48,8 @@ function App() {
                     userID: user.uid,
                 };
                 dispatch(setActiveUser(data));
-                // setLoading(false);
             } else {
                 dispatch(clearActiveUser());
-                // setLoading(false);
             }
         });
     }, [dispatch]);

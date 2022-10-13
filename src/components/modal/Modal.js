@@ -15,6 +15,8 @@ import {
     changeActiveProject,
     addProject,
     addTodoById,
+    delTodoById,
+    clearTempTodo,
 } from '../../redux/features/data';
 
 export const ProjectModal = () => {
@@ -63,7 +65,7 @@ export const ProjectModal = () => {
 };
 
 export const TodoModal = () => {
-    const { todo, active } = useSelector((state) => state.data);
+    const { todo, active, tempTodo } = useSelector((state) => state.data);
     const { userID } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
@@ -77,15 +79,19 @@ export const TodoModal = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        addTodoById();
+        if (tempTodo) {
+            dispatch(delTodoById({ userID, active, todo: tempTodo }));
+        }
         dispatch(addTodoById({ userID, active, todo }));
         dispatch(closeTodo());
         dispatch(clearTodoFields());
+        dispatch(clearTempTodo());
     };
 
     const onClose = () => {
         dispatch(closeTodo());
         dispatch(clearTodoFields());
+        dispatch(clearTempTodo());
     };
 
     return ReactDOM.createPortal(
